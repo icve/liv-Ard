@@ -1,0 +1,85 @@
+
+input structure:
+`{command}[arguments];`
+    * ";" is the terminating char follow by every statement
+    * some statement require no arguments
+notation: \1 (byte 00000001) 1(ascii 1 == \00110001)
+example:
+b1;
+m\0;
+
+Command:
+
+
+Motion Sensor Related:
+
+b{state};
+    -set LED state
+    state:
+        \0 to turn off LED 
+        \1 to turn on LED
+
+m;
+    -get motion sensor state
+    Return :
+        \0 for LOW
+        \1 for HIGH 
+
+
+Seven Segment Control
+*all ASCII char*
+
+a{dig}{char}{dp};
+    -set character
+    dig:
+        ASCII number 0-7
+    char:
+        one of ASCII char below          
+         * '0','1','2','3','4','5','6','7','8','9','0',
+         *  'A','b','c','d','E','F','H','L','P',
+         *  '.','-','_',' ' 
+    dp:
+        ASCII 0 or 1
+
+d{dig}{hex}{dp};
+    -set digit
+    dig:
+        ...
+    hex:
+        ASCII 0-F
+    dp:
+        ...
+
+r{dig}{hex};
+    -set row
+    dig:
+        ...
+    hex:
+        ...
+c{dig}{hex};
+    -set column
+
+l{row}{column}{state};
+    -set single led
+    row:
+        ASCII 0-7
+    column:
+        ASCII 0-7
+    state:
+        ASCII 0 or 1
+
+s{state};
+    -if shutdown IC
+    state:
+        ASCII 0 or 1
+        1 for off
+        0 for on
+
+i{int};
+    -set intensity
+    int:
+        ASCII 0 - 15
+
+0;
+    --clear display
+
