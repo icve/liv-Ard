@@ -1,7 +1,7 @@
 #!/mnt/usb/wk/jpt/py/bin/python
 
 import time
-from serial import Serial
+from serial import Serial, SerialTimeoutException
 import logging
 from logging.handlers import RotatingFileHandler
 from subprocess import PIPE, Popen
@@ -22,10 +22,16 @@ handler.setFormatter(formatter)
 if __name__ == "__main__":
     logger.info("Starting")
     # Set up
-    usb = Serial(device, baudrate)
+    usb = Serial(device, baudrate, timeout=1) 
     time.sleep(3)
-    usb.write("0;".encode())
-    usb.write("i8;".encode())
+    # turn on second display
+    usb.write("s10;".encode())
+    # set intensitive
+    usb.write("i08;".encode())
+    usb.write("i11;".encode())
+    # clear display
+    usb.write("00;".encode())
+    usb.write("01;".encode())
     # buffer for seven segment display
     buf = [0, 0, 0, 0, 0, 0, 0, 0]
     # buffer for led state
@@ -39,7 +45,8 @@ if __name__ == "__main__":
             netstat = Popen(["tail", "-1", "/mnt/usb/logs/piTem.log"], stdout=PIPE).communicate()[0].split("\t")[-1].replace("\n", "")
         for i, char in enumerate(reversed(time.strftime("{1}.%H{0}%M").format("-" if int(time.time()*2) % 2 == 0 else " ", int(pitem)))):
             if buf[i] != char:
-                usb.write(("a" + str(i) + char + str(int(not i)) + ";").encode())
+                usb.write(("a" + "0" + str(i) + char + str(int(not i)) + ";").encode())
+                usb.write(("r" + "1" + "0" +("FF" if int(round(time.time())) % 2 else "00") + ";").encode())
                 usb.flush()
                 buf[i] = char
         # motion Sensor ck

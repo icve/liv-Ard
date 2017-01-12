@@ -2,7 +2,8 @@
 
 #define motionSensor 5
 #define motionLED 6
-LedControl lc=LedControl(2,3,4,1);
+#define numOfDisplay 2
+LedControl lc=LedControl(2,3,4,numOfDisplay);
 
 
 void setup() {
@@ -26,6 +27,8 @@ int char2i(char x){
 void parseRun(String cmd){
     char func = cmd.charAt(0);
     switch (func){
+      //---------------
+      // motionLogging
       case 'b':
         // inverse byte to sink active-low LED
         digitalWrite(motionLED, !cmd.charAt(1));
@@ -33,45 +36,47 @@ void parseRun(String cmd){
       case 'm':
         Serial.write(digitalRead(motionSensor));
       break;
+
+      // -------------------------
       // 7 Segment display controll
       //character
       case 'a':
-         lc.setChar(0, char2i(cmd.charAt(1)), cmd.charAt(2), char2i(cmd.charAt(3)));
+         lc.setChar(char2i(cmd.charAt(1)), char2i(cmd.charAt(2)), cmd.charAt(3), char2i(cmd.charAt(4)));
       break;
       //digit d0F1 (digit)(value)(dot)
       case 'd':
-         lc.setDigit(0, char2i(cmd.charAt(1)), strtol(cmd.substring(2,3).c_str(), NULL, 16), cmd.charAt(3) - '0');
+         lc.setDigit(char2i(cmd.charAt(1)), char2i(cmd.charAt(2)), strtol(cmd.substring(3,4).c_str(), NULL, 16), cmd.charAt(4) - '0');
       break;
 
       case 'r': 
-         lc.setRow(0, char2i(cmd.charAt(1)), strtol(cmd.substring(2).c_str(), NULL, 16));
+         lc.setRow(char2i(cmd.charAt(1)), char2i(cmd.charAt(2)), strtol(cmd.substring(3).c_str(), NULL, 16));
       break;
 
       case 'c':
-         lc.setColumn(0, char2i(cmd.charAt(1)), strtol(cmd.substring(2).c_str(), NULL, 16));
+         lc.setColumn(char2i(cmd.charAt(1)), char2i(cmd.charAt(2)), strtol(cmd.substring(3).c_str(), NULL, 16));
       break;
 
       case 'l': 
-         lc.setLed(0, char2i(cmd.charAt(1)), char2i(cmd.charAt(2)), char2i(cmd.charAt(3)));
+         lc.setLed(char2i(cmd.charAt(1)), char2i(cmd.charAt(2)), char2i(cmd.charAt(3)), char2i(cmd.charAt(4)));
       break;
       case 's':
-            //int state = cmd.chatAt(1).
-            lc.shutdown(0, char2i(cmd.charAt(1)));
-            lc.setDigit(0, 1, 10, true);
+            //int state = cmd.chatAt(2).
+            lc.shutdown(char2i(cmd.charAt(1)), char2i(cmd.charAt(2)));
+            lc.setDigit(char2i(cmd.charAt(1)), 1, 10, true);
         break;
       
        //intensity
         case 'i':
-           lc.setIntensity(0, cmd.substring(1).toInt());
+           lc.setIntensity(char2i(cmd.charAt(1)), cmd.substring(2).toInt());
         break;
 
       //clear
       case '0':
-        lc.clearDisplay(0);
+        lc.clearDisplay(char2i(cmd.charAt(1)));
         break;
             
          default:
-            Serial.println(char2i(cmd.charAt(1)));
+            Serial.println(char2i(cmd.charAt(2)));
          break;
     }
 }
