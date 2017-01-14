@@ -5,11 +5,13 @@ from serial import Serial, SerialTimeoutException
 import logging
 from logging.handlers import RotatingFileHandler
 from subprocess import PIPE, Popen
+from animations import ledClockPointer
 
 motionLogFile = "/mnt/usb/logs/motionLog.log"
 device = "/dev/ttyUSB0"
 baudrate = 9600
 updateintv = .5
+ledpointer = ledClockPointer()
 
 logger = logging.getLogger('mtlog')
 handler = RotatingFileHandler(motionLogFile, maxBytes=50e3, backupCount=10)
@@ -22,7 +24,7 @@ handler.setFormatter(formatter)
 if __name__ == "__main__":
     logger.info("Starting")
     # Set up
-    usb = Serial(device, baudrate, timeout=1) 
+    usb = Serial(device, baudrate, timeout=2) 
     time.sleep(3)
     # turn on second display
     usb.write("s10;".encode())
@@ -46,7 +48,9 @@ if __name__ == "__main__":
         for i, char in enumerate(reversed(time.strftime("{1}.%H{0}%M").format("-" if int(time.time()*2) % 2 == 0 else " ", int(pitem)))):
             if buf[i] != char:
                 usb.write(("a" + "0" + str(i) + char + str(int(not i)) + ";").encode())
-                usb.write(("r" + "1" + "0" +("FF" if int(round(time.time())) % 2 else "00") + ";").encode())
+                # usb.write(("r" + "1" + "0" +("FF" if int(round(time.time())) % 2 else "00") + ";").encode())
+                usb.write(("l1" + "".join(ledpointer.ledRing[int(round(time.time()) % 31)]) + "1" + ";").encode())
+                usb.write(("l1" + "".join(ledpointer.ledRing[int(time.time()) % 31 - 1]) + "0" + ";").encode())
                 usb.flush()
                 buf[i] = char
         # motion Sensor ck
