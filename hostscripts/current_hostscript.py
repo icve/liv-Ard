@@ -38,6 +38,8 @@ if __name__ == "__main__":
     buf = [0, 0, 0, 0, 0, 0, 0, 0]
     # buffer for led state
     buf2 = b'\x00'
+    # buffer for matric led pointer animation
+    lastled = 0
     # main Loop
     while True:
         # seven segment display update
@@ -49,10 +51,15 @@ if __name__ == "__main__":
             if buf[i] != char:
                 usb.write(("a" + "0" + str(i) + char + str(int(not i)) + ";").encode())
                 # usb.write(("r" + "1" + "0" +("FF" if int(round(time.time())) % 2 else "00") + ";").encode())
-                usb.write(("l1" + "".join(ledpointer.ledRing[int(round(time.time()) % 31)]) + "1" + ";").encode())
-                usb.write(("l1" + "".join(ledpointer.ledRing[int(time.time()) % 31 - 1]) + "0" + ";").encode())
                 usb.flush()
                 buf[i] = char
+        led = int(time.time()*2) % 29
+	if led != lastled:
+            # turn on current new led
+            usb.write(("l1" + "".join(ledpointer.ledRing[led]) + "1" + ";").encode())
+            # turn off last led
+            usb.write(("l1" + "".join(ledpointer.ledRing[int(lastled)]) + "0" + ";").encode())
+	    lastled = led
         # motion Sensor ck
         usb.write(b'm;')
         state = usb.read(1)
