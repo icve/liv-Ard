@@ -62,7 +62,7 @@ class Lcd:
 
     def setCursor(self, c, r):
         self.rpush([self.cmdmap["setCursor"], c, r])
-        self.updcur([c, r])
+        self.updcur([c, r], True)
 
     def print(self, txt):
         self.dev.write((chr(self.cmdmap["print"]) + txt + ";").encode())
@@ -73,7 +73,8 @@ class Lcd:
         if type(val) is list:
             val = self.convpos(val)
         if raw:
-            self.curpose = val
+            self.curpos = val
+            print(val)
             return
         else:
             rval = val + self.curpos
