@@ -1,0 +1,65 @@
+32   void setCursor(uint8_t col, uint8_t row);
+   
+33   virtual void print(uint8_t value);
+   
+34   void backlight ( void );
+
+35   void noBacklight ( void );
+
+36   void blink();
+
+37   void noBlink();
+
+38   void cursor();
+
+39   void noCursor();
+
+40   void clear();
+   
+41   void home();
+   
+42   void moveCursorLeft();
+
+43   void moveCursorRight();
+
+44   void autoscroll();
+
+45   void noAutoscroll();
+
+46   void on ( void );
+
+47   void off ( void );
+
+48   void display();
+
+49   void noDisplay();
+
+
+
+----------------
+
+50   void scrollDisplayLeft();
+
+51   void scrollDisplayRight();
+
+52   void leftToRight();
+
+53   void rightToLeft();
+  
+   void createChar(uint8_t location, uint8_t charmap[]);
+------
+
+
+
+
+
+
+   void createChar(uint8_t location, const char *charmap);
+
+
+
+
+
+   virtual void setBacklight ( uint8_t value ) { };
+
+
