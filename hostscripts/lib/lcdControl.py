@@ -85,27 +85,3 @@ class Lcd:
             return curpos[0] + curpos[1] * self.bufsize
         elif type(curpos) is int:
             return [curpos % self.bufsize, int(curpos / self.bufsize)]
-
-usb = Serial("/dev/ttyUSB0")
-lcd = Lcd(usb)
-
-# sleep(3)
-# lcd.push("sensor")
-# p = "3.141592653589793238462643383279502884197169399375105820974944592307816406286"
-# p = "3.141592653589793238462643383279502884193.14159265358979323846264338327950288419"
-# p = "3.14159265358979323846264338327950288419"
-# lcd.print(p)
-# # lcd.setCursor(5, 1)
-# # print(lcd.curpos)
-
-# import time
-# lcd.setCursor(0, 1)
-# sleep(1)
-# lcd.push("clear")
-# while True:
-#     sleep(.5)
-#     lcd.setCursor(0, 0)
-#     lcd.print(time.strftime("%x"))
-#     lcd.setCursor(0, 1)
-#     lcd.print(time.strftime("%X"))
-
