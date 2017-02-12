@@ -42,11 +42,7 @@ class Lcd:
 
     def rpush(self, rcmd):
         '''Does not advise user to use since this skips the cursor update'''
-        if type(rcmd) is int:
-            cmd = self.lcdParsecmd + chr(rcmd) + ";"
-        else:
-            # for setCursor
-            cmd = self.lcdParsecmd + "".join(map(chr, rcmd)) + ";"
+        cmd = self.lcdParsecmd + chr(rcmd) + ";"
         self.dev.write(cmd.encode())
 
     def push(self, ky):
@@ -62,7 +58,6 @@ class Lcd:
             return
 
     def setCursor(self, c, r):
-        # self.rpush([self.cmdmap["setCursor"], c, r])
         # displace to avoid transmitting 0, as weirdness occurs on rpi-ard when 0 is send?
         # please alos see the ard sketch for dedisplacement
         self.dev.write(("x" + chr(32) + chr(c + 1) + chr(r + 1) + ";").encode())
@@ -91,8 +86,8 @@ class Lcd:
         elif type(curpos) is int:
             return [curpos % self.bufsize, int(curpos / self.bufsize)]
 
-# usb = Serial("/dev/ttyUSB0")
-# lcd = Lcd(usb)
+usb = Serial("/dev/ttyUSB0")
+lcd = Lcd(usb)
 
 # sleep(3)
 # lcd.push("sensor")
