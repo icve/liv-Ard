@@ -54,12 +54,12 @@ if __name__ == "__main__":
                 usb.flush()
                 buf[i] = char
         led = int(time.time()*2) % 29
-	if led != lastled:
+        if led != lastled:
             # turn on current new led
             usb.write(("l1" + "".join(ledpointer.ledRing[led]) + "1" + ";").encode())
             # turn off last led
             usb.write(("l1" + "".join(ledpointer.ledRing[int(lastled)]) + "0" + ";").encode())
-	    lastled = led
+            lastled = led
         # motion Sensor ck
         usb.write(b'm;')
         state = usb.read(1)
