@@ -65,6 +65,9 @@ class Lcd:
 
     def print(self, txt):
         self.dev.write((self.lcdParsecmd + chr(self.cmdmap["print"]) + txt + ";").encode())
+        for i, char in enumerate(txt):
+            c, r = self.convpos(i + self.curpos)
+            self.buf[r][c] = char
         self.updcur(len(txt))
 
     def updcur(self, val, raw=False):
