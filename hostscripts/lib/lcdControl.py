@@ -35,6 +35,7 @@ class Lcd:
                 "noDisplay": 49,
                 "scrollDisplayLeft": 50,
                 "scrollDisplayRight": 51,
+                # curpos update not yet implemented
                 "leftToRight": 52,
                 "rightToLeft": 53}
         else:
