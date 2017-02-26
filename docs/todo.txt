@@ -1,2 +1,2 @@
 - implement curpos update on leftToRight cmd
-- 
+- write test!
