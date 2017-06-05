@@ -29,8 +29,12 @@ m;
 Seven Segment Control
 *all ASCII char*
 
-a{dig}{char}{dp};
+a{dev}{dig}{char}{dp};
     -set character
+    dev:
+        devides on the spi interface can be chained,
+        this number specify which device is the data sending to
+        device, 0(first device) 1(second device) ,,,
     dig:
         ASCII number 0-7
     char:
