@@ -1,3 +1,5 @@
 .pioenvs
 .piolibdeps
 *.pyc
+*.7z
+/lib/*

@@ -1,5 +1,3 @@
-from serial import Serial
-from time import sleep
 
 
 class Lcd:
