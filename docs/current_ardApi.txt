@@ -28,6 +28,7 @@ m;
 
 Seven Segment Control
 *all ASCII char*
+note: all command takes {dev} as first argument implicilty* see first entry below,
 
 a{dev}{dig}{char}{dp};
     -set character
