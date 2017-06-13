@@ -3,6 +3,7 @@ class SevSeg:
 
     def __init__(self, dev, size=8, dev_id=0):
         self.buf = [""] * size
+        self.onstate = None
         self.dev = dev
         self.dev_id = dev_id
 
@@ -43,8 +44,10 @@ class SevSeg:
 
     def setstate(self, s):
         """turn on/off the devide"""
-        data = "s{}{};".format(self.dev_id, s)
-        self.dev.write(data.encode())
+        if self.onstate != s:
+            data = "s{}{};".format(self.dev_id, s)
+            self.dev.write(data.encode())
+            self.onstate = s
 
     def setintensity(self, i):
         """set device off"""

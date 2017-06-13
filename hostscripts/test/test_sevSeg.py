@@ -61,3 +61,18 @@ class TestSevSeg(unittest.TestCase):
     def test_write_one_char(self):
         self.ss.write("-", 1, 1)
         self.assertEqual(self.dev.opt, b"a01-1;")
+
+    def test_onstate_buffer(self):
+        self.ss.setstate(0)
+        self.assertEqual(self.dev.opt, b"s00;")
+        self.dev.clr()
+        self.ss.setstate(0)
+        self.assertIsNone(self.dev.opt)
+
+        self.ss.setstate(1)
+        self.assertEqual(self.dev.opt, b"s01;")
+        self.dev.clr()
+        self.ss.setstate(1)
+        self.assertIsNone(self.dev.opt)
+
+
