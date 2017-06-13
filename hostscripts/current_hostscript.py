@@ -7,7 +7,7 @@ from logging.handlers import RotatingFileHandler
 from subprocess import PIPE, Popen
 from animations import ledClockPointer
 from lib import lcdControl
-
+from lib import SevSeg
 motionLogFile = "/mnt/usb/logs/motionLog.log"
 device = "/dev/ttyUSB0"
 baudrate = 9600
@@ -29,17 +29,24 @@ if __name__ == "__main__":
     time.sleep(3)
     # lcd init
     lcd = lcdControl.Lcd(usb)
+    sevdp = SevSeg(usb)
+    mtxdp = SevSeg(usb, dev_id=1)
     lcd.push('clear')
-    # turn on second display
-    usb.write("s10;".encode())
+    # turn on second display, > note: not sure why 0
+    ## usb.write("s10;".encode())
+    mtxdp.setstate(0)
     # set intensitive
-    usb.write("i08;".encode())
-    usb.write("i11;".encode())
+    ## usb.write("i08;".encode())
+    sevdp.setintensity(8)
+    ## usb.write("i11;".encode())
+    mtxdp.setintensity(1)
     # clear display
-    usb.write("00;".encode())
-    usb.write("01;".encode())
+    ## usb.write("00;".encode())
+    ## usb.write("01;".encode())
+    sevdp.clear()
+    mtxdp.clear()
     # buffer for seven segment display
-    buf = [0, 0, 0, 0, 0, 0, 0, 0]
+    ## buf = [0, 0, 0, 0, 0, 0, 0, 0]
     # buffer for led state
     buf2 = b'\x00'
     # buffer for matric led pointer animation
@@ -52,17 +59,21 @@ if __name__ == "__main__":
             pitem = round(int(f.readline().replace("\n", "")) / 1000)
             netstat = Popen(["tail", "-1", "/mnt/usb/logs/piTem.log"], stdout=PIPE).communicate()[0].decode().split("\t")[-1].replace("\n", "")
         for i, char in enumerate(reversed(time.strftime("{1}.%H{0}%M").format("-" if int(time.time()*2) % 2 == 0 else " ", int(pitem)))):
+            sevdp.write(char, i)
+            """
             if buf[i] != char:
                 usb.write(("a" + "0" + str(i) + char + str(int(not i)) + ";").encode())
                 # usb.write(("r" + "1" + "0" +("FF" if int(round(time.time())) % 2 else "00") + ";").encode())
                 usb.flush()
                 buf[i] = char
+            """
+
         led = int(time.time()*2) % 29
         if led != lastled:
             # turn on current new led
             usb.write(("l1" + "".join(ledpointer.ledRing[led]) + "1" + ";").encode())
             # turn off last led
-            usb.write(("l1" + "".join(ledpointer.ledRing[int(lastled)]) + "0" + ";").encode())
+            usb.write(("l1" + "".join(ledpointer.ledRing[lastled]) + "0" + ";").encode())
             lastled = led
         # motion Sensor ck
         usb.write(b'm;')
@@ -77,3 +88,4 @@ if __name__ == "__main__":
         lcd.setCursor(0, 1)
         lcd.print(time.strftime("%X"))
         time.sleep(updateintv)
+

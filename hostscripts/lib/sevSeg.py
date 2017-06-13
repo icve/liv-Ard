@@ -14,12 +14,7 @@ class SevSeg:
             if self.buf[sp] == txt[i]:
                 continue
             else:
-                data = "a{dv}{dg}{ch}{.};".format(
-                    {"dv": self.dev_id,
-                     "dg": sp,
-                     "ch": txt[i],
-                     ".": dot}
-                )
+                data = "a{}{}{}{};".format(self.dev_id, sp, txt[i], dot)
                 self.dev.write(data.encode())
                 # update buf
                 self.buf[sp] = txt[i]
@@ -28,6 +23,8 @@ class SevSeg:
         """clear display"""
         data = "0{};".format(self.dev_id)
         self.dev.write(data.encode())
+        # clear buffer
+        self.buf = [""]* len(self.buf)
 
     def printrow(self, hexval):
         """print hexval to row"""
