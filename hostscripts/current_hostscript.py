@@ -39,7 +39,7 @@ if __name__ == "__main__":
     ## usb.write("i08;".encode())
     sevdp.setintensity(8)
     ## usb.write("i11;".encode())
-    mtxdp.setintensity(1)
+    mtxdp.setintensity(0)
     # clear display
     ## usb.write("00;".encode())
     ## usb.write("01;".encode())
@@ -68,12 +68,14 @@ if __name__ == "__main__":
                 buf[i] = char
             """
 
-        led = int(time.time()*2) % 29
+        led = int(time.time()%60/59 * 28)
         if led != lastled:
+            if(led)==0:
+                mtxdp.clear()
             # turn on current new led
             usb.write(("l1" + "".join(ledpointer.ledRing[led]) + "1" + ";").encode())
             # turn off last led
-            usb.write(("l1" + "".join(ledpointer.ledRing[lastled]) + "0" + ";").encode())
+            ## usb.write(("l1" + "".join(ledpointer.ledRing[lastled]) + "0" + ";").encode())
             lastled = led
         # motion Sensor ck
         usb.write(b'm;')
