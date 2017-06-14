@@ -13,6 +13,7 @@ class Lcd:
         self.bufsize = bufsize
         self.curpos = curpos
         self.scpos = scpos
+        self.lightstate = None
         if cmdmap == "":
             self.cmdmap = {
                 "setCursor": 32,
@@ -159,3 +160,12 @@ class Lcd:
             return curpos[0] + curpos[1] * self.bufsize
         elif type(curpos) is int:
             return [curpos % self.bufsize, int(curpos / self.bufsize)]
+
+    def backlight(self, i):
+        """ turn on / off backlight"""
+        if self.lightstate != i:
+            if i:
+                self.push("backlight")
+            else:
+                self.push("noBacklight")
+            self.lightstate = i
