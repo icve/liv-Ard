@@ -89,5 +89,12 @@ if __name__ == "__main__":
         lcd.print(time.strftime("%d/%m/%y"))
         lcd.setCursor(0, 1)
         lcd.print(time.strftime("%X"))
+        hour = time.time()/(60*60)% 24
+        if(13 < hour < 21):
+            lcd.push("noBacklight")
+        else:
+            lcd.push("backlight")
+
+        # clock
         time.sleep(updateintv)
 
