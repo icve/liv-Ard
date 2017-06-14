@@ -1,20 +1,7 @@
 import unittest
 from lib import SevSeg
+from .dev4testing import Dev
 
-
-class tsDev:
-    opt = None
-
-    def write(self, txt):
-        self.opt = txt
-
-    def clr(self):
-        self.opt = None
-
-    def pop(self):
-        rlt = self.opt
-        self.clr()
-        return rlt
 
 def test_dev_id_wrapper(func):
 
@@ -27,7 +14,7 @@ def test_dev_id_wrapper(func):
 class TestSevSeg(unittest.TestCase):
 
     def setUp(self):
-        self.dev = tsDev()
+        self.dev = Dev()
         self.ss = SevSeg(self.dev)
 
     def tearDown(self):
