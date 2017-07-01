@@ -68,7 +68,7 @@ if __name__ == "__main__":
                 buf[i] = char
             """
 
-        led = int(time.time()%60/59 * 28)
+        led = int(time.time()%60/59 * 27)
         if led != lastled:
             if(led)==0:
                 mtxdp.clear()
