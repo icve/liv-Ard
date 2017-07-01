@@ -8,12 +8,12 @@ class Lcd:
         self.lcdParsecmd = lcdParsecmd
         # printOverHead are used to determine whether to split print cmd when there is gap between txt cluster
         self.printOverHead = printOverHead
-        # create buffer
-        self.buf = [[" " for c in range(bufsize)] for r in range(size[1])]
         self.bufsize = bufsize
         self.curpos = curpos
         self.scpos = scpos
         self.lightstate = None
+        # create buffer
+        self._setup_buffer()
         if cmdmap == "":
             self.cmdmap = {
                 "setCursor": 32,
@@ -169,3 +169,11 @@ class Lcd:
             else:
                 self.push("noBacklight")
             self.lightstate = i
+
+    def clear(self):
+        """clear display and buffer"""
+        self._setup_buffer()
+        self.push("clear")
+
+    def _setup_buffer(self):
+        self.buf = [[" " for c in range(self.bufsize)] for r in range(self.size[1])]
