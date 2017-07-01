@@ -4,7 +4,7 @@ def getRing(side=8, ring=0):
     coors = [(str(ring), str(x)) for x in seqgen] +\
         [(str(x), str(opp_edge)) for x in seqgen[1:]] +\
         [(str(opp_edge), str(x)) for x in reversed(seqgen[:-1])] +\
-        [(str(x), str(ring)) for x in reversed(seqgen[:-1])]
+        [(str(x), str(ring)) for x in reversed(seqgen[1:-1])]
     return coors
 
 class ledClockPointer(object):
