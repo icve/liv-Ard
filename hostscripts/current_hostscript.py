@@ -5,14 +5,14 @@ from serial import Serial, SerialTimeoutException
 import logging
 from logging.handlers import RotatingFileHandler
 from subprocess import PIPE, Popen
-from animations import ledClockPointer
+from animations import Led_clock_pointer
 from lib import lcdControl
 from lib import SevSeg
+
 motionLogFile = "/mnt/usb/logs/motionLog.log"
 device = "/dev/ttyUSB0"
 baudrate = 9600
 updateintv = .5
-ledpointer = ledClockPointer()
 
 logger = logging.getLogger('mtlog')
 handler = RotatingFileHandler(motionLogFile, maxBytes=50e3, backupCount=10)
@@ -27,31 +27,25 @@ if __name__ == "__main__":
     # Set up
     usb = Serial(device, baudrate, timeout=2)
     time.sleep(3)
-    # lcd init
+    # init virtual devices
     lcd = lcdControl.Lcd(usb)
     sevdp = SevSeg(usb)
     mtxdp = SevSeg(usb, dev_id=1)
+
+    led_clock_pointer = Led_clock_pointer(mtxdp)
+
     lcd.push('clear')
     # turn on second display, > note: not sure why 0
-    ## usb.write("s10;".encode())
     mtxdp.setstate(0)
     # set intensitive
-    ## usb.write("i08;".encode())
     sevdp.setintensity(8)
-    ## usb.write("i11;".encode())
     mtxdp.setintensity(0)
     # clear display
-    ## usb.write("00;".encode())
-    ## usb.write("01;".encode())
     sevdp.clear()
     mtxdp.clear()
-    # buffer for seven segment display
-    ## buf = [0, 0, 0, 0, 0, 0, 0, 0]
-    # buffer for led state
     buf2 = b'\x00'
-    # buffer for matric led pointer animation
-    lastled = 0
-    # main Loop
+
+
     while True:
         # seven segment display update
         pitem = 0
@@ -68,15 +62,9 @@ if __name__ == "__main__":
                 buf[i] = char
             """
 
-        led = int(time.time()%60/59 * 27)
-        if led != lastled:
-            if(led)==0:
-                mtxdp.clear()
-            # turn on current new led
-            usb.write(("l1" + "".join(ledpointer.ledRing[led]) + "1" + ";").encode())
-            # turn off last led
-            ## usb.write(("l1" + "".join(ledpointer.ledRing[lastled]) + "0" + ";").encode())
-            lastled = led
+        # 8x8 LED matrix
+        led_clock_pointer.update()
+
         # motion Sensor ck
         usb.write(b'm;')
         state = usb.read(1)
@@ -89,7 +77,7 @@ if __name__ == "__main__":
         lcd.print(time.strftime("%d/%m/%y"))
         lcd.setCursor(0, 1)
         lcd.print(time.strftime("%X"))
-        hour = time.time()/(60*60)% 24
+        hour = time.time()/(60*60) % 24
         if(13 < hour < 21):
             lcd.backlight(0)
         else:
@@ -97,4 +85,3 @@ if __name__ == "__main__":
 
         # clock
         time.sleep(updateintv)
-

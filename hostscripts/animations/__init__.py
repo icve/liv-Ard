@@ -1,2 +1,1 @@
-from animations import matrix_animation
-ledClockPointer = matrix_animation.ledClockPointer
+from .matrix_animation import Led_clock_pointer
