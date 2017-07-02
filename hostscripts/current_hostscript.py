@@ -34,7 +34,6 @@ if __name__ == "__main__":
 
     led_clock_pointer = Led_clock_pointer(mtxdp)
 
-    lcd.push('clear')
     # turn on second display, > note: not sure why 0
     mtxdp.setstate(0)
     # set intensitive
@@ -43,6 +42,7 @@ if __name__ == "__main__":
     # clear display
     sevdp.clear()
     mtxdp.clear()
+    lcd.clear()
     buf2 = b'\x00'
 
 
