@@ -2,23 +2,20 @@
 class Dev:
 
     def __init__(self, tostr=False):
-        self.opt = None
+        self.opt = []
         self.tostr = tostr
 
     def write(self, txt):
-        self.opt = txt
+        self.opt.append(txt)
 
     def clr(self):
-        self.opt = None
+        self.opt = []
 
     def pop(self):
-        if self.opt is None:
+        if not self.opt:
             return None
 
-        rlt = self.opt
-        self.clr()
         if self.tostr:
-            return rlt.decode()
+            return self.opt.pop().decode()
         else:
-            return rlt
-
+            return self.opt.pop()

@@ -1,4 +1,4 @@
-from time import time
+from time import localtime
 
 
 def get_ring(side=8, ring=0):
@@ -17,9 +17,9 @@ class Led_clock_pointer(object):
         self.linear_display = Linear_display(get_ring(ring=ring), dsp)
         self.mtxdev = mtxdev
         self.point_generator = {
-                "sec": lambda: int(time()) % 60 / 59,
-                "min": lambda: int(time()) / 60 % 60 / 59,
-                "hour": lambda: int(time()) / 3600 % 24 / 23
+                "sec": lambda: localtime().tm_sec / 59,
+                "min": lambda: localtime().tm_min / 59,
+                "hour": lambda: localtime().tm_hour / 23
                 }[pointertype]
         self.lastcood = None
 
@@ -31,7 +31,7 @@ class Led_clock_pointer(object):
 
         if n == 0:
             self.mtxdev.clear()
-        self.mtxdev.setled(cood[0], cood[1], 1)
+        self.mtxdev.setled(*cood, 1)
         self.lastcood = cood
 
 
