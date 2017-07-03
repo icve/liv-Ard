@@ -1,5 +1,5 @@
 import unittest
-from animations import Led_clock_pointer, Linear_display
+from animations import Led_clock_pointer, Linear_display, _get_ring
 from .dev4testing import Dev
 from lib import SevSeg
 from time import strftime
@@ -55,3 +55,13 @@ class test_Led_clock_pointer(unittest.TestCase):
         lcp.point_generator = lambda: .5
         lcp.update()
         self.assertEqual(dev.pop(), "l0741;")
+
+
+class test_get_ring(unittest.TestCase):
+
+    def test_get_ring(self):
+        # currently only testing for the number of led cood to be generated
+        self.assertEqual(len(_get_ring(ring=0)), 28)
+        self.assertEqual(len(_get_ring(ring=1)), 20)
+        self.assertEqual(len(_get_ring(ring=2)), 12)
+        self.assertEqual(len(_get_ring(ring=3)), 4)

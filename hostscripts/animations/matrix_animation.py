@@ -1,7 +1,7 @@
 from time import localtime
 
 
-def get_ring(side=8, ring=0):
+def _get_ring(side=8, ring=0):
     seqgen = range(ring, side - ring)
     coors = [(str(ring), str(x)) for x in seqgen] +\
         [(str(x), str(seqgen[-1])) for x in seqgen[1:]] +\
@@ -14,7 +14,7 @@ class Led_clock_pointer(object):
     def __init__(self, mtxdev, pointertype="sec", ring=0, dsp=None):
         self.pt = pointertype
         dsp = dsp if dsp else int(4 - ring)
-        self.linear_display = Linear_display(get_ring(ring=ring), dsp)
+        self.linear_display = Linear_display(_get_ring(ring=ring), dsp)
         self.mtxdev = mtxdev
         self.point_generator = {
                 "sec": lambda: localtime().tm_sec / 59,
