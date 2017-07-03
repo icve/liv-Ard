@@ -2,18 +2,18 @@ from time import localtime
 
 
 def get_ring(side=8, ring=0):
-    opp_edge = side - 1 - ring
-    seqgen = range(side)
+    seqgen = range(ring, side - ring)
     coors = [(str(ring), str(x)) for x in seqgen] +\
-        [(str(x), str(opp_edge)) for x in seqgen[1:]] +\
-        [(str(opp_edge), str(x)) for x in reversed(seqgen[:-1])] +\
+        [(str(x), str(seqgen[-1])) for x in seqgen[1:]] +\
+        [(str(seqgen[-1]), str(x)) for x in reversed(seqgen[:-1])] +\
         [(str(x), str(ring)) for x in reversed(seqgen[1:-1])]
     return coors
 
 
 class Led_clock_pointer(object):
-    def __init__(self, mtxdev, pointertype="sec", ring=0, dsp=4):
+    def __init__(self, mtxdev, pointertype="sec", ring=0, dsp=None):
         self.pt = pointertype
+        dsp = dsp if dsp else int(4 - ring)
         self.linear_display = Linear_display(get_ring(ring=ring), dsp)
         self.mtxdev = mtxdev
         self.point_generator = {
