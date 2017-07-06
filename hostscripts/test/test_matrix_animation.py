@@ -44,8 +44,19 @@ class test_Led_clock_pointer(unittest.TestCase):
         lcp.point_generator = lambda: 0
         lcp.update()
         self.assertEqual(dev.pop(), "l0041;")
-        self.assertEqual(dev.pop(), "00;")
+        self.assertIsNone(dev.pop())
+
+        # check clear queue
+        self.assertEqual(len(lcp.off_queue), 27)
         lcp.update()
+        self.assertEqual(dev.pop(), "l0050;")
+        self.assertEqual(len(lcp.off_queue), 26)
+        for _ in range(27):
+            lcp.update()
+            dev.pop()
+
+        lcp.update()
+        self.assertEqual(len(lcp.off_queue), 0)
         self.assertIsNone(dev.pop())
 
         lcp.point_generator = lambda: 1
