@@ -5,14 +5,14 @@ from serial import Serial, SerialTimeoutException
 import logging
 from logging.handlers import RotatingFileHandler
 from subprocess import PIPE, Popen
-from animations import Led_clock_pointer
+from animations import Led_clock_pointer, Led_clock_flasher
 from lib import lcdControl
 from lib import SevSeg
 
 motionLogFile = "/mnt/usb/logs/motionLog.log"
 device = "/dev/ttyUSB0"
 baudrate = 9600
-updateintv = .5
+updateintv = .3
 
 logger = logging.getLogger('mtlog')
 handler = RotatingFileHandler(motionLogFile, maxBytes=50e3, backupCount=10)
@@ -32,7 +32,9 @@ if __name__ == "__main__":
     sevdp = SevSeg(usb)
     mtxdp = SevSeg(usb, dev_id=1)
 
-    led_clock_pointer = Led_clock_pointer(mtxdp)
+    led_clock_pointer_sec = Led_clock_pointer(mtxdp, ring=1)
+    led_clock_pointer_min = Led_clock_pointer(mtxdp, pointertype="min", ring=0)
+    led_clock_flasher = Led_clock_flasher(mtxdp)
 
     lcd.push('clear')
     # turn on second display, > note: not sure why 0
@@ -63,7 +65,9 @@ if __name__ == "__main__":
             """
 
         # 8x8 LED matrix
-        led_clock_pointer.update()
+        led_clock_pointer_sec.update()
+        led_clock_pointer_min.update()
+        led_clock_flasher.update()
 
         # motion Sensor ck
         usb.write(b'm;')
@@ -80,7 +84,11 @@ if __name__ == "__main__":
         hour = time.time()/(60*60) % 24
         if(13 < hour < 21):
             lcd.backlight(0)
+            mtxdp.setstate(1)
+            sevdp.setstate(1)
         else:
+            mtxdp.setstate(0)
+            sevdp.setstate(0)
             lcd.backlight(1)
 
         # clock
