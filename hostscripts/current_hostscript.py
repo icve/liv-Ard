@@ -2,11 +2,11 @@
 
 import time
 from serial import Serial
-from subprocess import PIPE, Popen
 from animations import Led_clock_pointer, Led_clock_flasher
 from lib import lcdControl
 from lib import SevSeg
 from lib import Motion_sensor
+from lib.get_data import get_temp
 
 motionLogFile = "/mnt/usb/logs/motionLog.log"
 device = "/dev/ttyUSB0"
@@ -43,8 +43,7 @@ if __name__ == "__main__":
         # seven segment display update
         pitem = 0
         with open("/sys/class/thermal/thermal_zone0/temp", "r") as f:
-            pitem = round(int(f.readline().replace("\n", "")) / 1000)
-            netstat = Popen(["tail", "-1", "/mnt/usb/logs/piTem.log"], stdout=PIPE).communicate()[0].decode().split("\t")[-1].replace("\n", "")
+            pitem = get_temp()
         for i, char in enumerate(reversed(time.strftime("{1}.%H{0}%M").format("-" if int(time.time()*2) % 2 == 0 else " ", int(pitem)))):
             sevdp.write(char, i)
 
