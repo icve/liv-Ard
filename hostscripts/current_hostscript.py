@@ -7,6 +7,7 @@ from lib import lcdControl
 from lib import SevSeg
 from lib import Motion_sensor
 from lib.get_data import get_temp
+from animations import Seven_segment_clock
 
 motionLogFile = "/mnt/usb/logs/motionLog.log"
 device = "/dev/ttyUSB0"
@@ -28,6 +29,7 @@ if __name__ == "__main__":
     led_clock_pointer_sec = Led_clock_pointer(mtxdp, ring=1)
     led_clock_pointer_min = Led_clock_pointer(mtxdp, pointertype="min", ring=0)
     led_clock_flasher = Led_clock_flasher(mtxdp)
+    seven_segment_clock = Seven_segment_clock(sevdp)
 
     # turn on second display, > note: not sure why 0
     mtxdp.setstate(0)
@@ -40,12 +42,8 @@ if __name__ == "__main__":
     lcd.clear()
 
     while True:
-        # seven segment display update
-        pitem = 0
-        with open("/sys/class/thermal/thermal_zone0/temp", "r") as f:
-            pitem = get_temp()
-        for i, char in enumerate(reversed(time.strftime("{1}.%H{0}%M").format("-" if int(time.time()*2) % 2 == 0 else " ", int(pitem)))):
-            sevdp.write(char, i)
+        # seven_segment_clock update
+        seven_segment_clock.update()
 
         # 8x8 LED matrix
         led_clock_pointer_sec.update()
