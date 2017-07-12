@@ -6,13 +6,15 @@ from animations import Led_clock_pointer, Led_clock_flasher
 from lib import lcdControl
 from lib import SevSeg
 from lib import Motion_sensor
-from lib.get_data import get_temp
+from lib.get_data import get_temp, get_netstat
 from animations import Seven_segment_clock
+from sys import argv
 
 motionLogFile = "/mnt/usb/logs/motionLog.log"
 device = "/dev/ttyUSB0"
 baudrate = 9600
 updateintv = .3
+debug = "debug" in argv
 
 
 if __name__ == "__main__":
@@ -53,13 +55,15 @@ if __name__ == "__main__":
         # motion Sensor ck
         moss.update()
         # lcd
+        netstat = get_netstat()
+        temp = get_temp()
         lcd.setCursor(0, 0)
-        lcd.print(time.strftime("%d/%m/%y"))
+        lcd.print("tmp: {}".format(temp))
         lcd.setCursor(0, 1)
-        lcd.print(time.strftime("%X"))
-        hour = time.time()/(60*60) % 24
+        lcd.print("net: {}".format(netstat))
         # on off cycle
-        if(13 < hour < 21):
+        hour = time.time()/(60*60) % 24
+        if(13 < hour < 21 and not debug):
             lcd.backlight(0)
             mtxdp.setstate(1)
             sevdp.setstate(1)
