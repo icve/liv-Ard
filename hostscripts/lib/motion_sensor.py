@@ -28,7 +28,10 @@ class Motion_sensor:
         self.update_intv = update_intv
         self.dev = dev
         self.last_state = None
-        self.last_update = 0
+        # to ensure the first call of update method always work
+        # the value of last_update must satisfy
+        # i - last_update > update_intv where i >=0 
+        self.last_update = -update_intv - 1
         self.last_led_state = None
 
     def update(self):
@@ -39,6 +42,8 @@ class Motion_sensor:
                 self.logger.info(str(state))
                 self.last_state = state
                 self.set_led(state)
+
+            self.last_update = self.get_time()
 
     def get_state(self):
         """return state of the motion sensor, 1/0"""
