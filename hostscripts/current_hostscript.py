@@ -13,8 +13,10 @@ from sys import argv
 motionLogFile = "/mnt/usb/logs/motionLog.log"
 device = "/dev/ttyUSB0"
 baudrate = 9600
-updateintv = .3
+updateintv = .5
 debug = "debug" in argv
+
+print("update intv: {}".format(updateintv))
 
 
 if __name__ == "__main__":
