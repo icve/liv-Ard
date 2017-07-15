@@ -62,7 +62,7 @@ if __name__ == "__main__":
         lcd.setCursor(0, 0)
         lcd.print("tmp: {}".format(temp))
         lcd.setCursor(0, 1)
-        lcd.print("net: {}".format(netstat))
+        lcd.print("net: {}".format(netstat.ljust(11, " ")))
         # on off cycle
         hour = time.time()/(60*60) % 24
         if(13 < hour < 21 and not debug):
