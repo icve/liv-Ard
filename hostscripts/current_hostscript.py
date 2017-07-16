@@ -7,8 +7,9 @@ from lib import lcdControl
 from lib import SevSeg
 from lib import Motion_sensor
 from lib.get_data import get_temp, get_netstat
-from animations import Seven_segment_clock
+from animations import Seven_segment_clock, Rainfall
 from sys import argv
+
 
 motionLogFile = "/mnt/usb/logs/motionLog.log"
 device = "/dev/ttyUSB0"
@@ -30,17 +31,18 @@ if __name__ == "__main__":
     mtxdp = SevSeg(usb, dev_id=1)
     moss = Motion_sensor(usb, motionLogFile)
 
-    led_clock_pointer_sec = Led_clock_pointer(mtxdp, ring=1)
-    led_clock_pointer_min = Led_clock_pointer(mtxdp, pointertype="min", ring=0)
-    led_clock_flasher = Led_clock_flasher(mtxdp)
+    # led_clock_pointer_sec = Led_clock_pointer(mtxdp, ring=1)
+    # led_clock_pointer_min = Led_clock_pointer(mtxdp, pointertype="min", ring=0)
+    # led_clock_flasher = Led_clock_flasher(mtxdp)
     seven_segment_clock = Seven_segment_clock(sevdp)
+
+    rainfall = Rainfall(mtxdp, 2)
 
     # turn on second display, > note: not sure why 0
     mtxdp.setstate(0)
-    # set intensitive
     sevdp.setintensity(8)
     mtxdp.setintensity(0)
-    # clear display
+
     sevdp.clear()
     mtxdp.clear()
     lcd.clear()
@@ -50,9 +52,10 @@ if __name__ == "__main__":
         seven_segment_clock.update()
 
         # 8x8 LED matrix
-        led_clock_pointer_sec.update()
-        led_clock_pointer_min.update()
-        led_clock_flasher.update()
+        # led_clock_pointer_sec.update()
+        # led_clock_pointer_min.update()
+        # led_clock_flasher.update()
+        rainfall.update()
 
         # motion Sensor ck
         moss.update()
@@ -68,10 +71,10 @@ if __name__ == "__main__":
         if(13 < hour < 21 and not debug):
             lcd.backlight(0)
             mtxdp.setstate(1)
-            sevdp.setstate(1)
+           # sevdp.setstate(1)
         else:
             mtxdp.setstate(0)
-            sevdp.setstate(0)
+           # sevdp.setstate(0)
             lcd.backlight(1)
 
         # clock
