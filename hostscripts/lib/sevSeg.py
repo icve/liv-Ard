@@ -27,14 +27,14 @@ class SevSeg:
         # clear buffer
         self.buf = [""]* len(self.buf)
 
-    def printrow(self, hexval):
+    def printrow(self, row, hexval):
         """print hexval to row"""
-        data = "r{}{};".format(self.dev_id, hexval)
+        data = "r{}{}{};".format(self.dev_id, row, hexval)
         self.dev.write(data.encode())
 
-    def printcol(self, hexval):
+    def printcol(self, col, hexval):
         """print hexval to col"""
-        data = "c{}{};".format(self.dev_id, hexval)
+        data = "c{}{}{};".format(self.dev_id, col, hexval)
         self.dev.write(data.encode())
 
     def setled(self, r, c, s):

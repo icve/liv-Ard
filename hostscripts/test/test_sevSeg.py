@@ -31,12 +31,12 @@ class TestSevSeg(unittest.TestCase):
         self.assertEqual(self.dev.pop(), b"01;")
 
     def test_printrow(self):
-        self.ss.printrow("FF")
-        self.assertEqual(self.dev.pop(), b"r0FF;")
+        self.ss.printrow(1, "F")
+        self.assertEqual(self.dev.pop(), b"r01F;")
 
     def test_printcol(self):
-        self.ss.printcol("FF")
-        self.assertEqual(self.dev.pop(), b"c0FF;")
+        self.ss.printcol(0, "F")
+        self.assertEqual(self.dev.pop(), b"c00F;")
 
     def test_setled(self):
         self.ss.setled(1,2,1)
