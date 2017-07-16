@@ -71,10 +71,10 @@ if __name__ == "__main__":
         if(13 < hour < 21 and not debug):
             lcd.backlight(0)
             mtxdp.setstate(1)
-           # sevdp.setstate(1)
+            sevdp.setstate(1)
         else:
             mtxdp.setstate(0)
-           # sevdp.setstate(0)
+            sevdp.setstate(0)
             lcd.backlight(1)
 
         # clock
