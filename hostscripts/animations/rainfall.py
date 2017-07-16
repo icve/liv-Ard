@@ -20,8 +20,6 @@ class Rainfall:
     def update(self):
         self.add_random_strokes()
         for s in self.strokes:
-            pl = hex(s.b_value).replace("0x", "")
-            self.dev.printcol(s.pos, pl)
             if s.phase < s.height:
                 s.b_value = (s.b_value << 1) + 1
             elif s.phase >= MTXSIZE:
@@ -30,6 +28,8 @@ class Rainfall:
                 s.b_value = s.b_value << 1
 
             s.phase += 1
+            pl = hex(s.b_value).replace("0x", "")
+            self.dev.printcol(s.pos, pl)
             if s.b_value == 0:
                 self.strokes.remove(s)
 
