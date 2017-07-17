@@ -14,7 +14,7 @@ from sys import argv
 motionLogFile = "/mnt/usb/logs/motionLog.log"
 device = "/dev/ttyUSB0"
 baudrate = 9600
-updateintv = .5
+updateintv = .2
 debug = "debug" in argv
 
 print("update intv: {}".format(updateintv))
@@ -36,7 +36,7 @@ if __name__ == "__main__":
     # led_clock_flasher = Led_clock_flasher(mtxdp)
     seven_segment_clock = Seven_segment_clock(sevdp)
 
-    rainfall = Rainfall(mtxdp, 2)
+    rainfall = Rainfall(mtxdp, max_height=6, max_speed=5, min_speed=3)
 
     # turn on second display, > note: not sure why 0
     mtxdp.setstate(0)
