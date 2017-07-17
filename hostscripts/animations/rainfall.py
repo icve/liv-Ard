@@ -2,18 +2,31 @@ from random import randrange
 
 MTXSIZE = 8
 
+# TODO move MTXSIZE
+# TODO reverse fall toggle
+# TODO random speed
+# TODO over size stroke
+
 
 class Rainfall:
-    def __init__(self, mtxdev, maxstroke=4, height=3, speed=2):
+    def __init__(self, mtxdev,
+                 maxstroke=4,
+                 max_height=4,
+                 min_height=1,
+                 down=True,
+                 speed=2):
         self.dev = mtxdev
-        self.height = height
+        self.max_height = max_height
+        self.min_height = min_height
         self.maxstroke = maxstroke
         self.speed = speed
         self.strokes = []
+        self.down = down
 
     def add_random_strokes(self):
         while len(self.strokes) < self.maxstroke:
-            s = _Stroke(randrange(MTXSIZE))
+            h = randrange(self.min_height, self.max_height)
+            s = _Stroke(randrange(MTXSIZE), height=h)
             if s not in self.strokes:
                 self.strokes.append(s)
 
