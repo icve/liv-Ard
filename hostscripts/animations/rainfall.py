@@ -37,11 +37,12 @@ class Rainfall:
     def update(self):
         self.add_random_strokes()
         for s in self.strokes:
-            s.update()
-            pl = hex(s.b_value).replace("0x", "")
-            self.dev.printcol(s.pos, pl)
-            if s.b_value == 0:
-                self.strokes.remove(s)
+            # only write if updated
+            if s.update():
+                pl = hex(s.b_value).replace("0x", "")
+                self.dev.printcol(s.pos, pl)
+                if s.b_value == 0:
+                    self.strokes.remove(s)
 
 
 class _Stroke:
@@ -56,8 +57,9 @@ class _Stroke:
         self.time = time
 
     def update(self):
+        """ return false if not updated"""
         t = self.time()
-        if t - self.last_update > self.update_every:
+        if (t - self.last_update) > self.update_every:
             if self.phase < self.height:
                 self.b_value = (self.b_value << 1) + 1
             elif self.phase >= MTXSIZE:
@@ -66,6 +68,8 @@ class _Stroke:
                 self.b_value = self.b_value << 1
             self.phase += 1
             self.last_update = t
+            return True
+        return False
 
     def __eq__(self, o):
         return self.pos == o.pos
