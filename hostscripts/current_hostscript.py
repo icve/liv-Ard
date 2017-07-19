@@ -20,11 +20,13 @@ debug = "debug" in argv
 
 print("update intv: {}".format(updateintv))
 
-
 if __name__ == "__main__":
 
     # Set up usb
     usb = Serial(device, baudrate, timeout=2)
+    if debug:
+        from test.usb_relay import Usb_relay
+        usb = Usb_relay(usb)
     time.sleep(3)
     # init virtual devices
     lcd = lcdControl.Lcd(usb)
@@ -37,7 +39,7 @@ if __name__ == "__main__":
     # led_clock_flasher = Led_clock_flasher(mtxdp)
     seven_segment_clock = Seven_segment_clock(sevdp)
 
-    rainfall = Rainfall(mtxdp, max_height=6, max_speed=5, min_speed=3)
+    rainfall = Rainfall(mtxdp, max_height=6, max_speed=2, min_speed=1)
     lcd_show_tem_net = quick_slide(get_temp, "t", get_netstat, "net", lcd)
 
     # turn on second display, > note: not sure why 0
