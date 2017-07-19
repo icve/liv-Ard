@@ -9,11 +9,12 @@ from lib import Motion_sensor
 from lib.get_data import get_temp, get_netstat
 from animations import Seven_segment_clock
 from sys import argv
+from animations.stat_show import quick_slide
 
 motionLogFile = "/mnt/usb/logs/motionLog.log"
 device = "/dev/ttyUSB0"
 baudrate = 9600
-updateintv = .5
+updateintv = .1
 debug = "debug" in argv
 
 print("update intv: {}".format(updateintv))
@@ -34,6 +35,8 @@ if __name__ == "__main__":
     led_clock_pointer_min = Led_clock_pointer(mtxdp, pointertype="min", ring=0)
     led_clock_flasher = Led_clock_flasher(mtxdp)
     seven_segment_clock = Seven_segment_clock(sevdp)
+
+    lcd_show_tem_net = quick_slide(get_temp, "t", get_netstat, "net", lcd)
 
     # turn on second display, > note: not sure why 0
     mtxdp.setstate(0)
@@ -57,12 +60,7 @@ if __name__ == "__main__":
         # motion Sensor ck
         moss.update()
         # lcd
-        netstat = get_netstat()
-        temp = get_temp()
-        lcd.setCursor(0, 0)
-        lcd.print("tmp: {}".format(temp))
-        lcd.setCursor(0, 1)
-        lcd.print("net: {}".format(netstat.ljust(11, " ")))
+        lcd_show_tem_net.show()
         # on off cycle
         hour = time.time()/(60*60) % 24
         if(13 < hour < 21 and not debug):
