@@ -15,7 +15,7 @@ from animations.stat_show import quick_slide
 motionLogFile = "/mnt/usb/logs/motionLog.log"
 device = "/dev/ttyUSB0"
 baudrate = 9600
-updateintv = .1
+updateintv = .01
 debug = "debug" in argv
 
 print("update intv: {}".format(updateintv))
@@ -39,7 +39,7 @@ if __name__ == "__main__":
     # led_clock_flasher = Led_clock_flasher(mtxdp)
     seven_segment_clock = Seven_segment_clock(sevdp)
 
-    rainfall = Rainfall(mtxdp, max_height=6, max_speed=2, min_speed=1)
+    rainfall = Rainfall(mtxdp, max_height=6, max_speed=20, min_speed=10)
     lcd_show_tem_net = quick_slide(get_temp, "t", get_netstat, "net", lcd)
 
     # turn on second display, > note: not sure why 0
