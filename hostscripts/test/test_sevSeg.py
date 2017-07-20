@@ -1,5 +1,5 @@
 import unittest
-from lib import SevSeg
+from lib.sevSeg import SevSeg
 from .dev4testing import Dev
 
 

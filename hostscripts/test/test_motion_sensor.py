@@ -1,6 +1,6 @@
 from .dev4testing import Dev, tb
 import unittest
-from lib import Motion_sensor
+from lib.motion_sensor import Motion_sensor
 from tempfile import NamedTemporaryFile
 from time import sleep
 

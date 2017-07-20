@@ -1,6 +1,8 @@
 from .dev4testing import Dev
 import unittest
-from lib import Lcd
+from lib.lcdControl import Lcd
+
+
 
 
 class TestLcd(unittest.TestCase):

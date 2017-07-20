@@ -2,12 +2,13 @@
 
 import time
 from serial import Serial
-from animations import Led_clock_pointer, Led_clock_flasher
+from animations.matrix_animation import Led_clock_pointer, Led_clock_flasher
 from lib import lcdControl
-from lib import SevSeg
-from lib import Motion_sensor
+from lib.sevSeg import SevSeg
+from lib.motion_sensor import Motion_sensor
 from lib.get_data import get_temp, get_netstat
-from animations import Seven_segment_clock, Rainfall
+from animations.seven_segment_clock import Seven_segment_clock
+from animations.rainfall import Rainfall
 from sys import argv
 from animations.stat_show import quick_slide
 

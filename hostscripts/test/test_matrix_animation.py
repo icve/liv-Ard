@@ -1,7 +1,7 @@
 import unittest
-from animations import Led_clock_pointer, Linear_display, _get_ring
+from animations.matrix_animation import Led_clock_pointer, Linear_display, _get_ring
 from .dev4testing import Dev
-from lib import SevSeg
+from lib.sevSeg import SevSeg
 from time import strftime
 
 
