@@ -1,4 +1,4 @@
-from random import randrange, uniform
+from random import randrange, uniform, choice
 from time import time
 
 MTXSIZE = 8
@@ -6,7 +6,6 @@ MTXSIZE = 8
 # TODO move MTXSIZE
 # TODO over size stroke
 # TODO wirte test file
-# TODO randomise up_down
 
 
 class Rainfall:
@@ -16,7 +15,7 @@ class Rainfall:
                  min_height=1,
                  max_speed=4,
                  min_speed=1,
-                 down=True):
+                 down="random"):
         self.dev = mtxdev
         self.max_height = max_height
         self.min_height = min_height
@@ -30,7 +29,8 @@ class Rainfall:
         while len(self.strokes) < self.maxstroke:
             h = randrange(self.min_height, self.max_height)
             sp = uniform(self.min_speed, self.max_speed)
-            s = _Stroke(randrange(MTXSIZE), height=h, speed=sp, down=self.down)
+            d = choice((True, False)) if self.down == "random" else self.down
+            s = _Stroke(randrange(MTXSIZE), height=h, speed=sp, down=d)
             if s not in self.strokes:
                 self.strokes.append(s)
 
