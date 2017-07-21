@@ -33,7 +33,7 @@ class Slide:
                 # self.lcd.print(head + ctn)
 
                 ctn = "{}: {}".format(s.name, data)
-                self.lcd.print(ctn.ljust(s.space_padding - len(ctn)))
+                self.lcd.print(ctn.ljust(s.space_padding - len(ctn), " "))
 
 
 class _Stat(Update_wait):
