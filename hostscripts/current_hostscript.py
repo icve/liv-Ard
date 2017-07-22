@@ -6,20 +6,23 @@ from animations.matrix_animation import Led_clock_pointer, Led_clock_flasher
 from lib import lcdControl
 from lib.sevSeg import SevSeg
 from lib.motion_sensor import Motion_sensor
-from lib.get_data import get_temp, get_netstat
+from lib.get_data import get_temp, get_netstat, get_load, get_package_lost
 from animations.seven_segment_clock import Seven_segment_clock
 from animations.rainfall import Rainfall
 from sys import argv
-from animations.stat_show import quick_slide
+from animations.stat_show import single_slide, get_slides
 
 
 motionLogFile = "/mnt/usb/logs/motionLog.log"
 device = "/dev/ttyUSB0"
 baudrate = 9600
-updateintv = .01
+updateintv = 0.01
 debug = "debug" in argv
 
 print("update intv: {}".format(updateintv))
+
+if updateintv != 0:
+    print("or {} fps max".format(1 / updateintv))
 
 if __name__ == "__main__":
 
@@ -41,7 +44,13 @@ if __name__ == "__main__":
     seven_segment_clock = Seven_segment_clock(sevdp)
 
     rainfall = Rainfall(mtxdp, max_height=6, max_speed=20, min_speed=10)
-    lcd_show_tem_net = quick_slide(get_temp, "t", get_netstat, "net", lcd)
+    # lcd_show_tem_net = single_slide("temp", get_temp, "ping", get_netstat, lcd)
+
+    lcd_stat_show = get_slides(lcd,
+                               (("temp", get_temp),
+                                ("ping", get_netstat),
+                                ("load", get_load),
+                                ("lost", get_package_lost)))
 
     # turn on second display, > note: not sure why 0
     mtxdp.setstate(0)
@@ -65,7 +74,9 @@ if __name__ == "__main__":
         # motion Sensor ck
         moss.update()
         # lcd
-        lcd_show_tem_net.show()
+        # lcd_show_tem_net.show()
+        lcd_stat_show.update()
+
         # on off cycle
         hour = time.time()/(60*60) % 24
         if(13 < hour < 21 and not debug):
