@@ -13,7 +13,18 @@ def get_temp():
 
 def get_netstat():
     """ return ping time to 8.8.8.8 as string e.g 16.221"""
+    return _tail_pi_tem(4)
+
+
+def get_load():
+    return _tail_pi_tem(2)
+
+def get_package_lost():
+    return _tail_pi_tem(3)
+
+def _tail_pi_tem(idx):
     tail_cmd = ["tail", "-1", PITEMPLOG]
-    last_line = Popen(tail_cmd, stdout=PIPE).communicate()[0].decode()
-    netstat = last_line.split("\t")[-1].replace("\n", "")
-    return netstat
+    return Popen(tail_cmd, stdout=PIPE).communicate()[0]\
+                                       .decode()\
+                                       .replace("\n", "")\
+                                       .split("\t")[idx]
