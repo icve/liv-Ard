@@ -26,6 +26,7 @@ class Rainfall:
         self.down = down
 
     def add_random_strokes(self):
+
         while len(self.strokes) < self.maxstroke:
             h = randrange(self.min_height, self.max_height)
             sp = uniform(self.min_speed, self.max_speed)
@@ -40,9 +41,7 @@ class Rainfall:
             if s.update():
                 pl = hex(s.b_value).replace("0x", "")
                 self.dev.printcol(s.pos, pl)
-                if s.b_value == 0:
-                    self.strokes.remove(s)
-
+        self.strokes = [s for s in self.strokes if s.b_value]
 
 class _Stroke:
     def __init__(self, pos, height=3, speed=2, down=True, phase=0):
@@ -82,7 +81,7 @@ class _Stroke:
         if self.phase < self.height:
             self.b_value = (self.b_value >> 1) + 0x80
         else:
-            self.b_value = self.b_value >> 1
+            self.b_value = (self.b_value >> 1) & 0xFF
 
     def __eq__(self, o):
         return self.pos == o.pos
