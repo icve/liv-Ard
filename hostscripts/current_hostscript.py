@@ -6,7 +6,7 @@ from animations.matrix_animation import Led_clock_pointer, Led_clock_flasher
 from lib import lcdControl
 from lib.sevSeg import SevSeg
 from lib.motion_sensor import Motion_sensor
-from lib.get_data import get_temp, get_netstat, get_load, get_package_lost
+import lib.get_data as gdt
 from animations.seven_segment_clock import Seven_segment_clock
 from animations.rainfall import Rainfall
 from sys import argv
@@ -47,10 +47,13 @@ if __name__ == "__main__":
     # lcd_show_tem_net = single_slide("temp", get_temp, "ping", get_netstat, lcd)
 
     lcd_stat_show = get_slides(lcd,
-                               (("temp", get_temp),
-                                ("ping", get_netstat),
-                                ("load", get_load),
-                                ("lost", get_package_lost)))
+                               (("Temp", gdt.get_temp),
+                                ("Up", gdt.get_uptime),
+                                ("Load", gdt.get_load),
+                                ("Mem", gdt.get_mem_usage),
+                                ("Ping", gdt.get_netstat),
+                                ("Lost", gdt.get_package_lost)),
+                               update_every=3)
 
     # turn on second display, > note: not sure why 0
     mtxdp.setstate(0)
