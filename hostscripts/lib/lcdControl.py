@@ -2,10 +2,9 @@
 
 class Lcd:
 
-    def __init__(self, dev, cmdmap="", size=(16, 2), bufsize=40, curpos=0, scpos=0, lcdParsecmd='x', printOverHead=8):
+    def __init__(self, dev, cmdmap="", size=(16, 2), bufsize=40, curpos=0, scpos=0, printOverHead=8):
         self.dev = dev
         self.size = size
-        self.lcdParsecmd = lcdParsecmd
         # printOverHead are used to determine whether to split print cmd when there is gap between txt cluster
         self.printOverHead = printOverHead
         self.bufsize = bufsize
@@ -44,7 +43,7 @@ class Lcd:
 
     def rpush(self, rcmd):
         '''Does not advise user to use since this skips the cursor update'''
-        cmd = self.lcdParsecmd + chr(rcmd) + ";"
+        cmd = chr(rcmd) + ";"
         self.dev.write(cmd.encode())
 
     def push(self, ky):
@@ -67,7 +66,7 @@ class Lcd:
 
     def rprint(self, txt):
         '''Directly prints text to display without diff'''
-        self.dev.write((self.lcdParsecmd + chr(self.cmdmap["print"]) + txt + ";").encode())
+        self.dev.write((chr(self.cmdmap["print"]) + txt + ";").encode())
         for i, char in enumerate(txt):
             c, r = self.convpos(i + self.curpos)
             self.buf[r][c] = char

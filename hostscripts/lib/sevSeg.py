@@ -15,41 +15,45 @@ class SevSeg:
             if self.buf[sp] == txt[i]:
                 continue
             else:
-                data = "a{}{}{}{};".format(self.dev_id, sp, txt[i], dot)
+                data = "{}{}{}{}{};".format(chr(77),
+                                            self.dev_id,
+                                            sp,
+                                            txt[i],
+                                            dot)
                 self.dev.write(data.encode())
                 # update buf
                 self.buf[sp] = txt[i]
 
     def clear(self):
         """clear display"""
-        data = "0{};".format(self.dev_id)
+        data = "{}{};".format(chr(84), self.dev_id)
         self.dev.write(data.encode())
         # clear buffer
         self.buf = [""]* len(self.buf)
 
     def printrow(self, row, hexval):
         """print hexval to row"""
-        data = "r{}{}{};".format(self.dev_id, row, hexval)
+        data = "{}{}{}{};".format(chr(79), self.dev_id, row, hexval)
         self.dev.write(data.encode())
 
     def printcol(self, col, hexval):
         """print hexval to col"""
-        data = "c{}{}{};".format(self.dev_id, col, hexval)
+        data = "{}{}{}{};".format(chr(80), self.dev_id, col, hexval)
         self.dev.write(data.encode())
 
     def setled(self, r, c, s):
         """set single lec"""
-        data = "l{}{}{}{};".format(self.dev_id, r, c, s)
+        data = "{}{}{}{}{};".format(chr(81), self.dev_id, r, c, s)
         self.dev.write(data.encode())
 
     def setstate(self, s):
         """turn on/off the devide"""
         if self.onstate != s:
-            data = "s{}{};".format(self.dev_id, s)
+            data = "{}{}{};".format(chr(82), self.dev_id, s)
             self.dev.write(data.encode())
             self.onstate = s
 
     def setintensity(self, i):
         """set device off"""
-        data = "i{}{};".format(self.dev_id, i)
+        data = "{}{}{};".format(chr(83), self.dev_id, i)
         self.dev.write(data.encode())
