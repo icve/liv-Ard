@@ -132,6 +132,7 @@ void parseRun(String cmd){
 
         case 52:
             lcd.leftToRight();
+            break;
 
         case 53:
             lcd.rightToLeft();
@@ -191,12 +192,15 @@ void parseRun(String cmd){
 
             // current sensor
         case 86:
-            int cur = analogRead(CURRENT_SENSOR_PIN);
-            Serial.write(analogRead(CURRENT_SENSOR_PIN));
+            {int opt = analogRead(CURRENT_SENSOR_PIN);
+            Serial.write(opt & 0x00FF);
+            Serial.write(opt & 0xFF00);
             break;
+            }
 
         default:
             Serial.print("ERR");
+            Serial.print(func);
             break;
     }
 }
