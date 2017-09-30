@@ -6,6 +6,8 @@
 #define motionSensor 5
 #define motionLED 6
 #define numOfDisplay 2
+#define RELAY_PIN 7
+#define CURRENT_SENSOR_PIN 0
 LedControl lc=LedControl(2,3,4,numOfDisplay);
 LiquidCrystal_I2C lcd(0x27, 2, 1, 0, 4, 5, 6, 7, 3, POSITIVE);
 
@@ -37,6 +39,9 @@ void setup() {
     ssvgSetup();
     //lcd setup
     lcdSetup();
+
+    pinMode(RELAY_PIN, OUTPUT);
+    digitalWrite(RELAY_PIN, HIGH);
     Serial.begin(9600);
 }
 
@@ -154,7 +159,7 @@ void parseRun(String cmd){
             lc.setDigit(cmd.charAt(1), cmd.charAt(2), cmd.charAt(3), cmd.charAt(4));
             break;
 
-        case 79: 
+        case 79:
             lc.setRow(cmd.charAt(1), cmd.charAt(2), cmd.charAt(3));
             break;
 
@@ -162,7 +167,7 @@ void parseRun(String cmd){
             lc.setColumn(cmd.charAt(1), cmd.charAt(2), cmd.charAt(3));
             break;
 
-        case 81: 
+        case 81:
             lc.setLed(cmd.charAt(1), cmd.charAt(2), cmd.charAt(3), cmd.charAt(4));
             break;
 
@@ -177,6 +182,17 @@ void parseRun(String cmd){
             //clear
         case 84:
             lc.clearDisplay(cmd.charAt(1));
+            break;
+
+            // relay
+        case 85:
+            pinMode(RELAY_PIN, !cmd.charAt(1));
+            break;
+
+            // current sensor
+        case 86:
+            int cur = analogRead(CURRENT_SENSOR_PIN);
+            Serial.write(analogRead(CURRENT_SENSOR_PIN));
             break;
 
         default:

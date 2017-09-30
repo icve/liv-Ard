@@ -1,0 +1,16 @@
+
+D(digital)
+A(analog)
+O(output)
+I(input)
+
+DO 2,3,4 (seven segment display)
+DI 5 (motion sensor)
+DO 6 (laser)
+DO 7 (Relay)
+
+AO 4, 5 (16 x 2 lcd I2C display)
+
+AO 0 (current sensor)
+
+
