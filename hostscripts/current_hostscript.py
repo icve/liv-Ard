@@ -43,7 +43,7 @@ if __name__ == "__main__":
     # led_clock_flasher = Led_clock_flasher(mtxdp)
     seven_segment_clock = Seven_segment_clock(sevdp)
 
-    rainfall = Rainfall(mtxdp, max_height=6, max_speed=20, min_speed=10)
+    # rainfall = Rainfall(mtxdp, max_height=6, max_speed=20, min_speed=10)
     # lcd_show_tem_net = single_slide("temp", get_temp, "ping", get_netstat, lcd)
 
     lcd_stat_show = get_slides(lcd,
@@ -72,7 +72,7 @@ if __name__ == "__main__":
         # led_clock_pointer_sec.update()
         # led_clock_pointer_min.update()
         # led_clock_flasher.update()
-        rainfall.update()
+        # rainfall.update()
 
         # motion Sensor ck
         moss.update()

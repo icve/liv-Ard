@@ -1,3 +1,8 @@
+CRITICAL: 
+    UPDATE TEST CASES
+    UPDATE LIB
+    debug arduino sketch
+
 - web ui shows current status of devides and settings
 - auto deploy script
 - get coverage
