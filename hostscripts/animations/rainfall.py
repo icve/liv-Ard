@@ -39,8 +39,7 @@ class Rainfall:
         self.add_random_strokes()
         for s in self.strokes:
             if s.update():
-                pl = hex(s.b_value).replace("0x", "")
-                self.dev.printcol(s.pos, pl)
+                self.dev.printcol(s.pos, s.b_value)
         self.strokes = [s for s in self.strokes if s.b_value]
 
 class _Stroke:
