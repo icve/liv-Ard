@@ -1,3 +1,2 @@
-#! /usr/bin/env bash
-cd /home/cai/wk/Arduino_wk/livingRoom_ard/hostscripts
+#!/usr/bin/env bash
 python -m unittest
