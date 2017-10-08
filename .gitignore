@@ -2,7 +2,6 @@
 .piolibdeps
 *.pyc
 *.7z
-/lib/*
 *.swp
 *~
 
