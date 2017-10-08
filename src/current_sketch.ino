@@ -26,7 +26,7 @@ void motSetup(){
 
 void lcdSetup(){
   lcd.begin(16,2);
-  lcd.print("HELLO");
+  lcd.print("STARTING");
 
 
 }
@@ -130,6 +130,7 @@ void lcdParse(String cmd){
 
     case 52:
       lcd.leftToRight();
+    break;
     
     case 53:
       lcd.rightToLeft();
