@@ -25,22 +25,18 @@
 #
 # ------ arduino build
 language: python
-python:
-     - "2.7"
 
-sudo: false
-cache:
-    directories:
-        - "~/.platformio"
-install:
-    - pip install -U platformio
-
-script:
-    - platformio run
-
-
-# ------ hs build
-python: 3.5
 env: HSPATH="./hostscripts/"
+matrix:
+    include:
+        - python: "2.7"
+          env: NO_HS=true
+        - python: "3.5"
+          env: NO_ARD=true
+
+install:
+    - [ "$NO_ARD" = true ] || pip install -U platformio
+
 script:
-    - ./hostscripts/run_test.sh 
+    - [ "$NO_ARD" = true ] || platformio run
+    - [ "$NO_HS" = true ] || ./hostscripts/run_test.sh 
