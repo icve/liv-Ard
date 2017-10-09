@@ -1,2 +1,4 @@
 #!/usr/bin/env bash
-python -m unittest
+
+[ -z "$HSPATH" ] || cd $HSPATH
+python3 -m unittest
