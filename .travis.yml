@@ -23,23 +23,24 @@
 #
 # Template #1: General project. Test it using existing `platformio.ini`.
 #
-
+# ------ arduino build
 language: python
 python:
      - "2.7"
-     - "3.6"
 
 sudo: false
 cache:
     directories:
         - "~/.platformio"
-
-env: HSPATH="./hostscripts/"
-
 install:
     - pip install -U platformio
 
 script:
     - platformio run
-    - ./hostscripts/run_test.sh 
 
+
+# ------ hs build
+python: 3.5
+env: HSPATH="./hostscripts/"
+script:
+    - ./hostscripts/run_test.sh 
