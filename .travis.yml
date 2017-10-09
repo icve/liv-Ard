@@ -9,8 +9,8 @@ matrix:
           env: NO_ARD=true
 
 install:
-    - if [ ! "$NO_ARD" = true ]; then pip install -U platformio; fi
+    - if [ ! "$NO_ARD" = true ]; then pip install -U platformio; else echo "skiped ARD"; fi
 
 script:
     - if [ ! "$NO_ARD" = true ]; then platformio run; fi
-    - if [ ! "$NO_HS" = true ]; then ./hostscripts/run_test.sh; fi
+    - if [ ! "$NO_HS" = true ]; then ./hostscripts/run_test.sh; else echo "skiped HS"; fi
