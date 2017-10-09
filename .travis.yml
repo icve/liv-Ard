@@ -1,16 +1,18 @@
 language: python
 
-env: HSPATH="./hostscripts/"
 matrix:
     include:
         - python: "2.7"
           env: NO_HS=true
         - python: "3.5"
-          env: NO_ARD=true
+          env:
+              - NO_ARD=true
+              - HSPATH="./hostscripts/"
+
 
 install:
-    - if [ ! "$NO_ARD" = true ]; then pip install -U platformio; else echo "skiped ARD"; fi
+    - if [ ! "$NO_ARD" = true ]; then pip install -U platformio; fi
 
 script:
     - if [ ! "$NO_ARD" = true ]; then platformio run; fi
-    - if [ ! "$NO_HS" = true ]; then ./hostscripts/run_test.sh; else echo "skiped HS"; fi
+    - if [ ! "$NO_HS" = true ]; then ./hostscripts/run_test.sh; fi
