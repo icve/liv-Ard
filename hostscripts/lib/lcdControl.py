@@ -61,7 +61,7 @@ class Lcd:
     def setCursor(self, c, r):
         # displace to avoid transmitting 0, as weirdness occurs on rpi-ard when 0 is send?
         # please alos see the ard sketch for dedisplacement
-        self.dev.write(("x" + chr(32) + chr(c + 1) + chr(r + 1) + ";").encode())
+        self.dev.write((chr(32) + chr(c + 1) + chr(r + 1) + ";").encode())
         self.updcur([c, r], True)
 
     def rprint(self, txt):
