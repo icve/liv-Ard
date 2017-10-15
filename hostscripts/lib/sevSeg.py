@@ -33,7 +33,7 @@ class SevSeg:
 
     def printrow(self, row, hexval):
         """print hexval to row"""
-        data = b"".join(i.to_bytes(1, 'big') for i in (79, self.dev_id, col, hexval)) + b';'
+        data = b"".join(i.to_bytes(1, 'big') for i in (79, self.dev_id, row, hexval)) + b';'
         self.dev.write(data)
 
     def printcol(self, col, hexval):
