@@ -33,13 +33,13 @@ class SevSeg:
 
     def printrow(self, row, hexval):
         """print hexval to row"""
-        data = "{}{}{}{};".format(chr(79), chr(self.dev_id), chr(row), chr(hexval))
-        self.dev.write(data.encode())
+        data = b"".join(i.to_bytes(1, 'big') for i in (79, self.dev_id, col, hexval)) + b';'
+        self.dev.write(data)
 
     def printcol(self, col, hexval):
         """print hexval to col"""
-        data = "{}{}{}{};".format(chr(80), chr(self.dev_id), chr(col), chr(hexval))
-        self.dev.write(data.encode())
+        data = b"".join(i.to_bytes(1, 'big') for i in (80, self.dev_id, col, hexval)) + b';'
+        self.dev.write(data)
 
     def setled(self, r, c, s):
         """set single lec"""
