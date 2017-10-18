@@ -3,10 +3,10 @@ from time import localtime
 
 def _get_ring(side=8, ring=0):
     seqgen = range(ring, side - ring)
-    coors = [(str(ring), str(x)) for x in seqgen] +\
-        [(str(x), str(seqgen[-1])) for x in seqgen[1:]] +\
-        [(str(seqgen[-1]), str(x)) for x in reversed(seqgen[:-1])] +\
-        [(str(x), str(ring)) for x in reversed(seqgen[1:-1])]
+    coors = [(ring, x) for x in seqgen] +\
+        [(x, seqgen[-1]) for x in seqgen[1:]] +\
+        [(seqgen[-1], x) for x in reversed(seqgen[:-1])] +\
+        [(x, ring) for x in reversed(seqgen[1:-1])]
     return coors
 
 

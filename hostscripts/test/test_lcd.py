@@ -16,26 +16,26 @@ class TestLcd(unittest.TestCase):
 
     def test_backlight_buffer(self):
         self.ss.backlight(1)
-        exp = "x" + chr(34) + ";"
+        exp = chr(34) + ";"
         self.assertEqual(self.dev.pop(), exp)
 
         self.ss.backlight(1)
         self.assertIsNone(self.dev.pop(), exp)
 
         self.ss.backlight(0)
-        exp = "x" + chr(35) + ";"
+        exp = chr(35) + ";"
         self.assertEqual(self.dev.pop(), exp)
 
         self.ss.backlight(0)
         self.assertIsNone(self.dev.pop())
 
         self.ss.backlight(1)
-        exp = "x" + chr(34) + ";"
+        exp = chr(34) + ";"
         self.assertEqual(self.dev.pop(), exp)
 
     def test_clear(self):
         self.ss.clear()
-        exp = "x" + chr(40) + ";"
+        exp = chr(40) + ";"
         self.assertEqual(self.dev.pop(), exp)
 
         # testing clear buffer

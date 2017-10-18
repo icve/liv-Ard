@@ -11,6 +11,11 @@ def test_dev_id_wrapper(func):
             func(self, dev_id)
     return wrp_func
 
+
+def bc(c):
+    return chr(c).encode()
+
+
 class TestSevSeg(unittest.TestCase):
 
     def setUp(self):
@@ -23,45 +28,46 @@ class TestSevSeg(unittest.TestCase):
     @test_dev_id_wrapper
     def test_clear(self, dev_id):
         self.ss.clear()
-        self.assertEqual(self.dev.pop(), "0{};".format(dev_id).encode())
+        rlt = "{}{};".format(chr(84), chr(dev_id)).encode()
+        self.assertEqual(self.dev.pop(), rlt)
 
     def test_clear_devid(self):
         self.ss.dev_id = 1
         self.ss.clear()
-        self.assertEqual(self.dev.pop(), b"01;")
+        self.assertEqual(self.dev.pop(), bc(84) + b"\x01;")
 
     def test_printrow(self):
-        self.ss.printrow(1, "F")
-        self.assertEqual(self.dev.pop(), b"r01F;")
+        self.ss.printrow(1, 0x0F)
+        self.assertEqual(self.dev.pop(), bc(79) + b"\x00\x01\x0F;")
 
     def test_printcol(self):
-        self.ss.printcol(0, "F")
-        self.assertEqual(self.dev.pop(), b"c00F;")
+        self.ss.printcol(0, 0x0F)
+        self.assertEqual(self.dev.pop(), bc(80) + b"\x00\x00\x0F;")
 
     def test_setled(self):
-        self.ss.setled(1,2,1)
-        self.assertEqual(self.dev.pop(), b"l0121;")
+        self.ss.setled(1, 2, 1)
+        self.assertEqual(self.dev.pop(), bc(81) + b"\x00\x01\x02\x01;")
 
     def test_setstate(self):
         self.ss.setstate(0)
-        self.assertEqual(self.dev.pop(), b"s00;")
+        self.assertEqual(self.dev.pop(), bc(82) + b"\x00\x00;")
 
     def test_setintensity(self):
         self.ss.setintensity(15)
-        self.assertEqual(self.dev.pop(), b"i015;")
-
+        self.assertEqual(self.dev.pop(), bc(83) + b"\x00\x0F;")
+    
     def test_write_one_char(self):
         self.ss.write("-", 1, 1)
-        self.assertEqual(self.dev.pop(), b"a01-1;")
+        self.assertEqual(self.dev.pop(), bc(77) + b"\x00\x01-\x01;")
 
     def test_onstate_buffer(self):
         self.ss.setstate(0)
-        self.assertEqual(self.dev.pop(), b"s00;")
+        self.assertEqual(self.dev.pop(), bc(82) + b"\x00\x00;")
         self.ss.setstate(0)
         self.assertIsNone(self.dev.pop())
 
         self.ss.setstate(1)
-        self.assertEqual(self.dev.pop(), b"s01;")
+        self.assertEqual(self.dev.pop(), bc(82) + b"\x00\x01;")
         self.ss.setstate(1)
         self.assertIsNone(self.dev.pop())
 

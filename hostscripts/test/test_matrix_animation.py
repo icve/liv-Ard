@@ -43,13 +43,13 @@ class test_Led_clock_pointer(unittest.TestCase):
         lcp = Led_clock_pointer(ss)
         lcp.point_generator = lambda: 0
         lcp.update()
-        self.assertEqual(dev.pop(), "l0041;")
+        self.assertEqual(dev.pop(), chr(81) + "\x00\x00\x04\x01;")
         self.assertIsNone(dev.pop())
 
         # check clear queue
         self.assertEqual(len(lcp.off_queue), 27)
         lcp.update()
-        self.assertEqual(dev.pop(), "l0050;")
+        self.assertEqual(dev.pop(), chr(81) + "\x00\x00\x05\x00;")
         self.assertEqual(len(lcp.off_queue), 26)
         for _ in range(27):
             lcp.update()
@@ -61,11 +61,11 @@ class test_Led_clock_pointer(unittest.TestCase):
 
         lcp.point_generator = lambda: 1
         lcp.update()
-        self.assertEqual(dev.pop(), "l0031;")
+        self.assertEqual(dev.pop(), chr(81) + "\x00\x00\x03\x01;")
 
         lcp.point_generator = lambda: .5
         lcp.update()
-        self.assertEqual(dev.pop(), "l0741;")
+        self.assertEqual(dev.pop(), chr(81) + "\x00\x07\x04\x01;")
 
 
 class test_get_ring(unittest.TestCase):

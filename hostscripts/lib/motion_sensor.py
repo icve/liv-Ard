@@ -47,12 +47,13 @@ class Motion_sensor:
 
     def get_state(self):
         """return state of the motion sensor, 1/0"""
-        self.dev.write(b'm;')
+        cmd = "{};".format(chr(76)).encode()
+        self.dev.write(cmd)
         return ord(self.dev.read(1))
 
     def set_led(self, state):
         """set the state of the led 1/0"""
         if state != self.last_led_state:
-            cmd = "b{};".format(chr(state))
+            cmd = "{}{};".format(chr(75), chr(state))
             self.dev.write(cmd.encode())
             self.last_led_state = state
