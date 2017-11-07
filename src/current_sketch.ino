@@ -186,7 +186,7 @@ void parseRun(String cmd){
 
             // relay
         case 85:
-            pinMode(RELAY_PIN, !cmd.charAt(1));
+            digitalWrite(RELAY_PIN, !cmd.charAt(1));
             break;
 
             // current sensor
