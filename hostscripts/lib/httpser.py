@@ -27,6 +27,7 @@ class HttpSer:
             def do_GET(self):
                 ''' method that gets call when GET is recived'''
                 self.send_response(200)
+                self.send_header("Access-Control-Allow-Origin", "*")
                 self.end_headers()
 
                 if self.path in urlmap:
