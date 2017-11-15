@@ -28,11 +28,12 @@ class HttpSer:
                 ''' method that gets call when GET is recived'''
                 self.send_response(200)
                 self.send_header("Access-Control-Allow-Origin", "*")
+                self.send_header("Content-Type", "text/plain")
                 self.end_headers()
 
                 if self.path in urlmap:
-                    urlmap[self.path]()
-                    self.wfile.write("OK".encode())
+                    rlt = urlmap[self.path]()
+                    self.wfile.write((rlt if rlt else "OK").encode())
                 else:
                     self.wfile.write("NO_MATCH".encode())
 
