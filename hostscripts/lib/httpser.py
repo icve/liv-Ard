@@ -26,16 +26,20 @@ class HttpSer:
         class _Handler(BaseHTTPRequestHandler):
             def do_GET(self):
                 ''' method that gets call when GET is recived'''
-                self.send_response(200)
-                self.send_header("Access-Control-Allow-Origin", "*")
-                self.send_header("Content-Type", "text/plain")
-                self.end_headers()
 
                 if self.path in urlmap:
                     rlt = urlmap[self.path]()
-                    self.wfile.write((rlt if rlt else "OK").encode())
+                    msg = rlt if rlt else "OK"
+                    retcode = 200
                 else:
-                    self.wfile.write("NO_MATCH".encode())
+                    msg = "NO_MATCH"
+                    retcode = 404
+
+                self.send_response(retcode)
+                self.send_header("Access-Control-Allow-Origin", "*")
+                self.send_header("Content-Type", "text/plain")
+                self.end_headers()
+                self.wfile.write(msg.encode())
 
         httpd = HTTPServer((addr, port), _Handler)
 
