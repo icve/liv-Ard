@@ -16,8 +16,17 @@ except KeyboardInterrupt:
 """
 
 from http.server import BaseHTTPRequestHandler, HTTPServer
+from os import listdir
+from os.path import splitext
+from shutil import copyfileobj
 
 PORT = 5001
+
+MIME = {"html": "text/html",
+        "js": "text/javascript",
+        "css": "text/css"}
+
+WEB_PATH = "./lib/web"
 
 class HttpSer:
     """http api server"""
@@ -26,6 +35,15 @@ class HttpSer:
         class _Handler(BaseHTTPRequestHandler):
             def do_GET(self):
                 ''' method that gets call when GET is recived'''
+
+                if self.path[1:] in listdir(WEB_PATH):
+                    self.send_response(200)
+                    SURFIX = splitext(self.path)[1]
+                    if SURFIX in MIME:
+                        self.send_header("Content-Type", MIME[SURFIX])
+                    self.end_headers()
+                    copyfileobj(open(WEB_PATH + self.path, 'rb'), self.wfile)
+                    return
 
                 if self.path in urlmap:
                     rlt = urlmap[self.path]()
