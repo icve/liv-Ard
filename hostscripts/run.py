@@ -13,6 +13,7 @@ from sys import argv, exit
 from animations.stat_show import single_slide, get_slides
 from lib.relay import Relay
 from lib.httpser import HttpSer
+from lib.buffdev import Dev
 
 
 motionLogFile = "/mnt/usb/logs/motionLog.log"
@@ -29,6 +30,7 @@ if updateintv != 0:
 
 # Set up usb
 usb = Serial(device, baudrate, timeout=2)
+usb = Dev(usb)
 if debug:
     from test.usb_relay import Usb_relay
     usb = Usb_relay(usb)
@@ -57,7 +59,7 @@ lcd_stat_show = get_slides(lcd,
                            update_every=3)
 # relay and apiser
 relay = Relay(usb)
-apiser = HttpSer({"/o": relay.on, "/f": relay.off}, addr="0.0.0.0")
+apiser = HttpSer({"/o": relay.on, "/f": relay.off, "/d": usb.get_json}, addr="0.0.0.0")
 
 # turn on second display, > note: not sure why 0
 mtxdp.setstate(0)
@@ -110,6 +112,7 @@ def update():
         lcd.backlight(1)
 
     apiser.update()
+    usb.update()
 
 
 main()
