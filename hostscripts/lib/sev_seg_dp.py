@@ -1,5 +1,5 @@
 
-class SevSeg:
+class Sev_seg_dp:
 
     def __init__(self, dev, size=8, dev_id=0):
         self.buf = [""] * size

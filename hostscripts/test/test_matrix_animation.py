@@ -1,7 +1,7 @@
 import unittest
 from animations.matrix_animation import Led_clock_pointer, Linear_display, _get_ring
 from .dev4testing import Dev
-from lib.sevSeg import SevSeg
+from lib.sev_seg_dp import Sev_seg_dp
 from time import strftime
 
 
@@ -39,7 +39,7 @@ class test_Led_clock_pointer(unittest.TestCase):
 
     def test_update(self):
         dev = Dev(True)
-        ss = SevSeg(dev)
+        ss = Sev_seg_dp(dev)
         lcp = Led_clock_pointer(ss)
         lcp.point_generator = lambda: 0
         lcp.update()

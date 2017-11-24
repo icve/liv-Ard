@@ -1,13 +1,13 @@
 from animations.seven_segment_clock import Seven_segment_clock
 from test.dev4testing import Dev
 from datetime import datetime
-from lib.sevSeg import SevSeg
+from lib.sev_seg_dp import Sev_seg_dp
 import unittest
 
 fromtimestamp = datetime.utcfromtimestamp
 
 dev = Dev()
-ss = SevSeg(dev)
+ss = Sev_seg_dp(dev)
 
 class TestSevenSegmentClock(unittest.TestCase):
 

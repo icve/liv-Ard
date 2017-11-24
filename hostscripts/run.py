@@ -4,7 +4,7 @@ import time
 from serial import Serial
 from animations.matrix_animation import Led_clock_pointer, Led_clock_flasher
 from lib import lcdControl
-from lib.sevSeg import SevSeg
+from lib.sev_seg_dp import Sev_seg_dp
 from lib.motion_sensor import Motion_sensor
 import lib.get_data as gdt
 from animations.seven_segment_clock import Seven_segment_clock
@@ -37,8 +37,8 @@ if debug:
 time.sleep(3)
 # init virtual devices
 lcd = lcdControl.Lcd(usb)
-sevdp = SevSeg(usb)
-mtxdp = SevSeg(usb, dev_id=1)
+sevdp = Sev_seg_dp(usb)
+mtxdp = Sev_seg_dp(usb, dev_id=1)
 moss = Motion_sensor(usb, motionLogFile)
 
 # led_clock_pointer_sec = Led_clock_pointer(mtxdp, ring=1)

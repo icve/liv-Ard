@@ -1,5 +1,5 @@
 import unittest
-from lib.sevSeg import SevSeg
+from lib.sev_seg_dp import Sev_seg_dp
 from .dev4testing import Dev
 
 
@@ -20,7 +20,7 @@ class TestSevSeg(unittest.TestCase):
 
     def setUp(self):
         self.dev = Dev()
-        self.ss = SevSeg(self.dev)
+        self.ss = Sev_seg_dp(self.dev)
 
     def tearDown(self):
         self.dev.clr()
