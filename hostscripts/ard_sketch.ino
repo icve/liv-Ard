@@ -191,10 +191,15 @@ void parseRun(String cmd){
 
             // current sensor
         case 86:
-            {int opt = analogRead(CURRENT_SENSOR_PIN);
-            Serial.write(opt & 0x00FF);
-            Serial.write(opt & 0xFF00);
-            break;
+            {
+                int opt = analogRead(CURRENT_SENSOR_PIN);
+                byte l = (byte) opt;
+                byte h = opt >>8;
+                Serial.write(h);
+                Serial.write(l);
+                //Serial.print(opt);
+                //Serial.print(';');
+                break;
             }
 
         default:
@@ -202,6 +207,7 @@ void parseRun(String cmd){
             Serial.print(func);
             break;
     }
+    Serial.flush();
 }
 
 

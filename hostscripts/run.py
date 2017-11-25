@@ -2,6 +2,7 @@
 
 import time
 from serial import Serial
+
 from animations.matrix_animation import Led_clock_pointer, Led_clock_flasher
 from lib import lcdControl
 from lib.sev_seg_dp import Sev_seg_dp
@@ -14,6 +15,7 @@ from animations.stat_show import single_slide, get_slides
 from lib.relay import Relay
 from lib.httpser import HttpSer
 from lib.buffdev import Dev
+from lib.current_sensor import Current_sensor
 
 
 motionLogFile = "/mnt/usb/logs/motionLog.log"
@@ -57,9 +59,18 @@ lcd_stat_show = get_slides(lcd,
                             ("Ping", gdt.get_netstat),
                             ("Lost", gdt.get_package_lost)),
                            update_every=3)
-# relay and apiser
+# relay
 relay = Relay(usb)
-apiser = HttpSer({"/o": relay.on, "/f": relay.off, "/d": usb.get_json}, addr="0.0.0.0")
+
+current_sensor = Current_sensor(usb)
+
+#api server
+SERVE_MAP = {"/o": relay.on,
+             "/f": relay.off,
+             "/d": usb.get_json,
+             "/c": current_sensor.get_json}
+
+apiser = HttpSer(SERVE_MAP, addr="0.0.0.0")
 
 # turn on second display, > note: not sure why 0
 mtxdp.setstate(0)
