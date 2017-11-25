@@ -1,25 +1,26 @@
 """
-a virtual usb device for buffering
+a virtual usb device for buffering,
+use for debugging purpose
 """
 from json import dumps
 from time import time
+
+
 class Dev:
     def __init__(self, dev):
         self.buf = []
         self.dev = dev
         self.last_updated = None
-        self.update_time= None
+        self.update_time = None
 
     def write(self, data):
-        """ write data to buffer"""
-        # dont bufer when polling motion sensor
-        if data[0] == 76:
-            self.dev.write(data) 
-            return
+        """ write data to buffer
+            access .dev.write to write directly to device"""
         self.buf.append((time(), data))
 
     def read(self, b):
-        return self.dev.read(b)
+        """ read data , use .dev.read instead"""
+        raise NotImplementedError("use .dev.read / .dev.write to read/write directly")
 
     def update(self):
         """ flush buffer and record time """
@@ -31,6 +32,6 @@ class Dev:
 
     def get_json(self):
         """ dump buffer as json """
-        return dumps([(t, [c for c in d])for t,d in self.buf])
+        return dumps([(t, [c for c in d])for t, d in self.buf])
 
 

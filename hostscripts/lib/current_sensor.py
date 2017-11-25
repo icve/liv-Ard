@@ -7,7 +7,7 @@ class Current_sensor:
         self.dev = dev
 
     def read(self):
-        self.dev.dev.write(bytes((86, )))
+        self.dev.write(bytes((86, )))
         h = self.dev.read(1)
         l = self.dev.read(1)
         rlt = (ord(h) << 8) + ord(l)

@@ -41,7 +41,7 @@ time.sleep(3)
 lcd = lcdControl.Lcd(usb)
 sevdp = Sev_seg_dp(usb)
 mtxdp = Sev_seg_dp(usb, dev_id=1)
-moss = Motion_sensor(usb, motionLogFile)
+
 
 # led_clock_pointer_sec = Led_clock_pointer(mtxdp, ring=1)
 # led_clock_pointer_min = Led_clock_pointer(mtxdp, pointertype="min", ring=0)
@@ -59,10 +59,14 @@ lcd_stat_show = get_slides(lcd,
                             ("Ping", gdt.get_netstat),
                             ("Lost", gdt.get_package_lost)),
                            update_every=3)
-# relay
-relay = Relay(usb)
 
-current_sensor = Current_sensor(usb)
+# devices that should not be buffered
+# motion sensor
+moss = Motion_sensor(usb.dev, motionLogFile)
+# relay
+relay = Relay(usb.dev)
+
+current_sensor = Current_sensor(usb.dev)
 
 #api server
 SERVE_MAP = {"/o": relay.on,
