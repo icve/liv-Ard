@@ -8,7 +8,11 @@
 #define numOfDisplay 2
 #define RELAY_PIN 7
 #define CURRENT_SENSOR_PIN 0
-LedControl lc=LedControl(2,3,4,numOfDisplay);
+#define MAX7219_DATA 2
+#define MAX7219_CLOCK 3
+#define MAX7219_CS 4
+
+LedControl lc(MAX7219_DATA, MAX7219_CLOCK, MAX7219_CS,numOfDisplay);
 LiquidCrystal_I2C lcd(0x27, 2, 1, 0, 4, 5, 6, 7, 3, POSITIVE);
 
 //7svg serup
@@ -201,6 +205,43 @@ void parseRun(String cmd){
                 //Serial.print(';');
                 break;
             }
+            // reset lcd matrix
+        case 87:
+        // temporary hack to fix signal corruption due to poor signal integrity
+        // by reseting matrix device
+                digitalWrite(MAX7219_CS, HIGH);
+                // 1. turn on
+                digitalWrite(MAX7219_CS, LOW);
+                // turn on mtx
+                shiftOut(MAX7219_DATA, MAX7219_CLOCK, MSBFIRST, 0x0c);
+                shiftOut(MAX7219_DATA, MAX7219_CLOCK, MSBFIRST, 0x01);
+                digitalWrite(MAX7219_CS, HIGH);
+                // no op for clock
+                shiftOut(MAX7219_DATA, MAX7219_CLOCK, MSBFIRST, 0);
+                shiftOut(MAX7219_DATA, MAX7219_CLOCK, MSBFIRST, 0);
+
+                // 2. decode mode
+                digitalWrite(MAX7219_CS, LOW);
+                shiftOut(MAX7219_DATA, MAX7219_CLOCK, MSBFIRST, 0x09);
+                shiftOut(MAX7219_DATA, MAX7219_CLOCK, MSBFIRST, 0x00);
+                shiftOut(MAX7219_DATA, MAX7219_CLOCK, MSBFIRST, 0);
+                shiftOut(MAX7219_DATA, MAX7219_CLOCK, MSBFIRST, 0);
+                digitalWrite(MAX7219_CS, HIGH);
+                // 3. intensity
+                digitalWrite(MAX7219_CS, LOW);
+                shiftOut(MAX7219_DATA, MAX7219_CLOCK, MSBFIRST, 0x0a);
+                shiftOut(MAX7219_DATA, MAX7219_CLOCK, MSBFIRST, 0x00);
+                shiftOut(MAX7219_DATA, MAX7219_CLOCK, MSBFIRST, 0);
+                shiftOut(MAX7219_DATA, MAX7219_CLOCK, MSBFIRST, 0);
+                digitalWrite(MAX7219_CS, HIGH);
+                // 4. number of row (scan limit)
+                digitalWrite(MAX7219_CS, LOW);
+                shiftOut(MAX7219_DATA, MAX7219_CLOCK, MSBFIRST, 0x0b);
+                shiftOut(MAX7219_DATA, MAX7219_CLOCK, MSBFIRST, 0x07);
+                shiftOut(MAX7219_DATA, MAX7219_CLOCK, MSBFIRST, 0);
+                shiftOut(MAX7219_DATA, MAX7219_CLOCK, MSBFIRST, 0);
+                digitalWrite(MAX7219_CS, HIGH);
+                break;
 
         default:
             Serial.print("ERR");
