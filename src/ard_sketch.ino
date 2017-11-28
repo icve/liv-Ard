@@ -40,6 +40,8 @@ void setup() {
     //lcd setup
     lcdSetup();
 
+    // for current sensor
+    analogReference(INTERNAL);
     pinMode(RELAY_PIN, OUTPUT);
     digitalWrite(RELAY_PIN, HIGH);
     Serial.begin(9600);
