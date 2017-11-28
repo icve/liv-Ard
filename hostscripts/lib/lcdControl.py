@@ -1,7 +1,6 @@
+from .base.dev import Device
 
-
-class Lcd:
-
+class Lcd(Device):
     def __init__(self, dev, cmdmap="", size=(16, 2), bufsize=40, curpos=0, scpos=0, printOverHead=8):
         self.dev = dev
         self.size = size
@@ -40,6 +39,7 @@ class Lcd:
                 "rightToLeft": 53}
         else:
             self.cmdmap = cmdmap
+        super().__init__()
 
     def rpush(self, rcmd):
         '''Does not advise user to use since this skips the cursor update'''
@@ -125,6 +125,8 @@ class Lcd:
 
     def print(self, txt):
         '''method that calls the dprint and rprint'''
+        if self.disable_flag:
+            return
         cood, txts = self.dPrint(txt)
 
         if len(cood) != len(txts):
@@ -176,3 +178,11 @@ class Lcd:
 
     def _setup_buffer(self):
         self.buf = [[" " for c in range(self.bufsize)] for r in range(self.size[1])]
+
+    def disable(self):
+        self.backlight(False)
+        self.disable_flag = True
+
+    def enable(self):
+        self.backlight(True)
+        self.disable_flag = False

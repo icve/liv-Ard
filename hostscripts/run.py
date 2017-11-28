@@ -68,16 +68,24 @@ relay = Relay(usb.dev)
 
 current_sensor = Current_sensor(usb.dev)
 
+def reset_mtx():
+    usb.dev.write(bytes((87, ord(';'))))
+    return "OK"
+
 #api server
 SERVE_MAP = {"/o": relay.on,
              "/f": relay.off,
              "/d": usb.get_json,
-             "/c": current_sensor.get_json}
+             "/c": current_sensor.get_json,
+             "/me": mtxdp.enable,
+             "/md": mtxdp.disable,
+             "/le": lcd.enable,
+             "/ld": lcd.disable,
+             "/reset": reset_mtx}
 
 apiser = HttpSer(SERVE_MAP, addr="0.0.0.0")
 
-# turn on second display, > note: not sure why 0
-mtxdp.setstate(0)
+mtxdp.shutdown(0)
 sevdp.setintensity(8)
 mtxdp.setintensity(0)
 
@@ -119,13 +127,12 @@ def update():
     hour = time.time()/(60*60) % 24
     if 13 < hour < 21 and not debug:
         lcd.backlight(0)
-        mtxdp.setstate(1)
-        sevdp.setstate(1)
+        mtxdp.shutdown(1)
+        sevdp.shutdown(1)
     else:
-        mtxdp.setstate(0)
-        sevdp.setstate(0)
+        mtxdp.shutdown(0)
+        sevdp.shutdown(0)
         lcd.backlight(1)
-
     apiser.update()
     usb.update()
 

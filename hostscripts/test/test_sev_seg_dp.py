@@ -48,8 +48,8 @@ class TestSevSeg(unittest.TestCase):
         self.ss.setled(1, 2, 1)
         self.assertEqual(self.dev.pop(), bc(81) + b"\x00\x01\x02\x01;")
 
-    def test_setstate(self):
-        self.ss.setstate(0)
+    def test_shutdown(self):
+        self.ss.shutdown(0)
         self.assertEqual(self.dev.pop(), bc(82) + b"\x00\x00;")
 
     def test_setintensity(self):
@@ -60,15 +60,15 @@ class TestSevSeg(unittest.TestCase):
         self.ss.write("-", 1, 1)
         self.assertEqual(self.dev.pop(), bc(77) + b"\x00\x01-\x01;")
 
-    def test_onstate_buffer(self):
-        self.ss.setstate(0)
+    def test_shutdown_buffer(self):
+        self.ss.shutdown(0)
         self.assertEqual(self.dev.pop(), bc(82) + b"\x00\x00;")
-        self.ss.setstate(0)
+        self.ss.shutdown(0)
         self.assertIsNone(self.dev.pop())
 
-        self.ss.setstate(1)
+        self.ss.shutdown(1)
         self.assertEqual(self.dev.pop(), bc(82) + b"\x00\x01;")
-        self.ss.setstate(1)
+        self.ss.shutdown(1)
         self.assertIsNone(self.dev.pop())
 
 
