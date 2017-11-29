@@ -11,6 +11,7 @@
 #define MAX7219_DATA 2
 #define MAX7219_CLOCK 3
 #define MAX7219_CS 4
+#define PHOTO_RESISTOR 1
 
 LedControl lc(MAX7219_DATA, MAX7219_CLOCK, MAX7219_CS,numOfDisplay);
 LiquidCrystal_I2C lcd(0x27, 2, 1, 0, 4, 5, 6, 7, 3, POSITIVE);
@@ -197,16 +198,10 @@ void parseRun(String cmd){
 
             // current sensor
         case 86:
-            {
-                int opt = analogRead(CURRENT_SENSOR_PIN);
-                byte l = (byte) opt;
-                byte h = opt >>8;
-                Serial.write(h);
-                Serial.write(l);
-                //Serial.print(opt);
-                //Serial.print(';');
-                break;
-            }
+            analogReference(INTERNAL);
+            send_int(analogRead(CURRENT_SENSOR_PIN));
+            break;
+
             // reset lcd matrix
         case 87:
         // temporary hack to fix signal corruption due to poor signal integrity
@@ -244,6 +239,10 @@ void parseRun(String cmd){
                 shiftOut(MAX7219_DATA, MAX7219_CLOCK, MSBFIRST, 0);
                 digitalWrite(MAX7219_CS, HIGH);
                 break;
+        case 88: 
+                analogReference(DEFAULT);
+                send_int(analogRead(PHOTO_RESISTOR));
+                break;
 
         default:
             Serial.print("ERR");
@@ -251,6 +250,13 @@ void parseRun(String cmd){
             break;
     }
     Serial.flush();
+}
+
+void send_int(int i){
+    byte l = (byte) i;
+    byte h = i>>8;
+    Serial.write(h);
+    Serial.write(l);
 }
 
 

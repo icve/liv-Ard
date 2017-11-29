@@ -16,6 +16,7 @@ from lib.relay import Relay
 from lib.httpser import HttpSer
 from lib.buffdev import Dev
 from lib.current_sensor import Current_sensor
+from lib.photo_resistor import Photo_resistor
 
 
 motionLogFile = "/mnt/usb/logs/motionLog.log"
@@ -68,6 +69,8 @@ relay = Relay(usb.dev)
 
 current_sensor = Current_sensor(usb.dev)
 
+photo_resistor = Photo_resistor(usb.dev)
+
 def reset_mtx():
     usb.dev.write(bytes((87, ord(';'))))
     return "OK"
@@ -77,6 +80,7 @@ SERVE_MAP = {"/o": relay.on,
              "/f": relay.off,
              "/d": usb.get_json,
              "/c": current_sensor.get_json,
+             "/p": photo_resistor.get_json,
              "/me": mtxdp.enable,
              "/md": mtxdp.disable,
              "/le": lcd.enable,
