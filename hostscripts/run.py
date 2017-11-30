@@ -2,6 +2,7 @@
 
 import time
 from serial import Serial
+from sys import argv, exit
 
 from animations.matrix_animation import Led_clock_pointer, Led_clock_flasher
 from lib import lcdControl
@@ -10,15 +11,15 @@ from lib.motion_sensor import Motion_sensor
 import lib.get_data as gdt
 from animations.seven_segment_clock import Seven_segment_clock
 from animations.rainfall import Rainfall
-from sys import argv, exit
 from animations.stat_show import single_slide, get_slides
 from lib.relay import Relay
 from lib.httpser import HttpSer
 from lib.buffdev import Dev
 from lib.current_sensor import Current_sensor
 from lib.photo_resistor import Photo_resistor
+from lib.notification_led import Notification_led
 
-
+# SETTINGS
 motionLogFile = "/mnt/usb/logs/motionLog.log"
 device = "/dev/ttyUSB0"
 baudrate = 9600
@@ -62,8 +63,14 @@ lcd_stat_show = get_slides(lcd,
                            update_every=3)
 
 # devices that should not be buffered
+
+# lazer notification
+notification_led = Notification_led(usb)
+
 # motion sensor
-moss = Motion_sensor(usb.dev, motionLogFile)
+motion_sensor = Motion_sensor(usb.dev,
+                              motionLogFile,
+                              trigger_handlers=[notification_led.set_led])
 # relay
 relay = Relay(usb.dev)
 
@@ -78,6 +85,8 @@ def reset_mtx():
 #api server
 SERVE_MAP = {"/o": relay.on,
              "/f": relay.off,
+             "/lo": notification_led.on,
+             "/lf": notification_led.off,
              "/d": usb.get_json,
              "/c": current_sensor.get_json,
              "/p": photo_resistor.get_json,
@@ -122,7 +131,7 @@ def update():
     rainfall.update()
 
     # motion Sensor ck
-    moss.update()
+    motion_sensor.update()
     # lcd
     # lcd_show_tem_net.show()
     lcd_stat_show.update()
