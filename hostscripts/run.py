@@ -85,6 +85,7 @@ def reset_mtx():
 #api server
 SERVE_MAP = {"/o": relay.on,
              "/f": relay.off,
+             "/rs": relay.get_state,
              "/lo": notification_led.on,
              "/lf": notification_led.off,
              "/d": usb.get_json,

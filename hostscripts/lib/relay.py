@@ -22,3 +22,6 @@ class Relay:
         if self.state != False:
             self.dev.write(OFF)
             self.state = False
+
+    def get_state(self):
+        return str(self.state)
