@@ -1,9 +1,12 @@
 #!/mnt/usb/wk/jpt/py/bin/python
 
+#TODO logging lib
+
 import time
 from serial import Serial
 from sys import argv, exit
 
+from lib.runner import Runner
 from animations.matrix_animation import Led_clock_pointer, Led_clock_flasher
 from lib import lcdControl
 from lib.sev_seg_dp import Sev_seg_dp
@@ -18,6 +21,7 @@ from lib.buffdev import Dev
 from lib.current_sensor import Current_sensor
 from lib.photo_resistor import Photo_resistor
 from lib.notification_led import Notification_led
+
 
 # SETTINGS
 motionLogFile = "/mnt/usb/logs/motionLog.log"
@@ -38,19 +42,24 @@ usb = Dev(usb)
 if debug:
     from test.usb_relay import Usb_relay
     usb = Usb_relay(usb)
+
 time.sleep(3)
+runner = Runner()
 # init virtual devices
 lcd = lcdControl.Lcd(usb)
 sevdp = Sev_seg_dp(usb)
 mtxdp = Sev_seg_dp(usb, dev_id=1)
 
+runner.add_module(usb)
 
 # led_clock_pointer_sec = Led_clock_pointer(mtxdp, ring=1)
 # led_clock_pointer_min = Led_clock_pointer(mtxdp, pointertype="min", ring=0)
 # led_clock_flasher = Led_clock_flasher(mtxdp)
-seven_segment_clock = Seven_segment_clock(sevdp)
+runner.add_module(Seven_segment_clock(sevdp))
+# seven_segment_clock = Seven_segment_clock(sevdp)
 
-rainfall = Rainfall(mtxdp, max_height=6, max_speed=20, min_speed=10)
+runner.add_module(Rainfall(mtxdp, max_height=6, max_speed=20, min_speed=10))
+# rainfall = Rainfall(mtxdp, max_height=6, max_speed=20, min_speed=10)
 # lcd_show_tem_net = single_slide("temp", get_temp, "ping", get_netstat, lcd)
 
 lcd_stat_show = get_slides(lcd,
@@ -61,8 +70,8 @@ lcd_stat_show = get_slides(lcd,
                             ("Ping", gdt.get_netstat),
                             ("Lost", gdt.get_package_lost)),
                            update_every=3)
+runner.add_module(lcd_stat_show)
 
-# devices that should not be buffered
 
 # lazer notification
 notification_led = Notification_led(usb)
@@ -96,7 +105,7 @@ SERVE_MAP = {"/o": relay.on,
              "/ld": lcd.disable,
              "/reset": reset_mtx}
 
-apiser = HttpSer(SERVE_MAP, addr="0.0.0.0")
+runner.add_module(HttpSer(SERVE_MAP, addr="0.0.0.0"))
 
 mtxdp.shutdown(0)
 sevdp.setintensity(8)
@@ -110,44 +119,12 @@ lcd.clear()
 def main():
     try:
         while True:
-            update()
-            # clock
+            runner.update()
             time.sleep(updateintv)
     except KeyboardInterrupt:
         apiser.close()
         print("\nport closed")
         exit(0)
 
-
-def update():
-    """ functions to run on every update """
-    # seven_segment_clock update
-    seven_segment_clock.update()
-
-    # 8x8 LED matrix
-    # led_clock_pointer_sec.update()
-    # led_clock_pointer_min.update()
-    # led_clock_flasher.update()
-    rainfall.update()
-
-    # motion Sensor ck
-    motion_sensor.update()
-    # lcd
-    # lcd_show_tem_net.show()
-    lcd_stat_show.update()
-
-    # on off cycle
-    hour = time.time()/(60*60) % 24
-    if 13 < hour < 21 and not debug:
-        lcd.backlight(0)
-        mtxdp.shutdown(1)
-        sevdp.shutdown(1)
-    else:
-        mtxdp.shutdown(0)
-        sevdp.shutdown(0)
-        lcd.backlight(1)
-    apiser.update()
-    usb.update()
-
-
-main()
+if __name__ == "__main__":
+    main()
