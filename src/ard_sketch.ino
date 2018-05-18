@@ -45,8 +45,6 @@ void setup() {
     //lcd setup
     lcdSetup();
 
-    // for current sensor
-    analogReference(INTERNAL);
     pinMode(RELAY_PIN, OUTPUT);
     digitalWrite(RELAY_PIN, HIGH);
     Serial.begin(9600);
@@ -198,7 +196,6 @@ void parseRun(String cmd){
 
             // current sensor
         case 86:
-            analogReference(INTERNAL);
             send_int(analogRead(CURRENT_SENSOR_PIN));
             break;
 
@@ -240,7 +237,6 @@ void parseRun(String cmd){
                 digitalWrite(MAX7219_CS, HIGH);
                 break;
         case 88: 
-                analogReference(DEFAULT);
                 send_int(analogRead(PHOTO_RESISTOR));
                 break;
 
