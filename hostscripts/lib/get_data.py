@@ -28,10 +28,13 @@ def get_package_lost():
 
 def _tail_pi_tem(idx):
     tail_cmd = ["tail", "-1", PITEMPLOG]
-    return Popen(tail_cmd, stdout=PIPE).communicate()[0]\
-                                       .decode()\
-                                       .replace("\n", "")\
-                                       .split("\t")[idx]
+    try:
+        return Popen(tail_cmd, stdout=PIPE).communicate()[0]\
+                                           .decode()\
+                                           .replace("\n", "")\
+                                           .split("\t")[idx]
+    except IndexError:
+        return "ERR"
 
 
 def get_uptime():
