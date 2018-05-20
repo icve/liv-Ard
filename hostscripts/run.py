@@ -80,6 +80,7 @@ notification_led = Notification_led(usb)
 motion_sensor = Motion_sensor(usb.dev,
                               motionLogFile,
                               trigger_handlers=[notification_led.set_led])
+runner.add_module(motion_sensor)
 # relay
 relay = Relay(usb.dev)
 
@@ -106,7 +107,8 @@ SERVE_MAP = {"/o": relay.on,
              "/ld": lcd.disable,
              "/reset": reset_mtx}
 
-runner.add_module(HttpSer(SERVE_MAP, addr="0.0.0.0"))
+apiser = HttpSer(SERVE_MAP, addr="0.0.0.0")
+runner.add_module(apiser)
 
 mtxdp.shutdown(0)
 sevdp.setintensity(8)
