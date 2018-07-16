@@ -8,7 +8,9 @@
 .python-version
 .vscode/c_cpp_properties.json
 .vscode
-
 .idea
-
 tags
+.idea
+tags
+.vscode/launch.json
+.vscode/.browse.c_cpp.db*
