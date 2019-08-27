@@ -4,6 +4,29 @@
 
 Source code that powers the Arduino in my living room.
 
+## What does it do?
+collect room brightness data
+collect human activity data(with infered motion sensor)
+dispay animation / information on 8*8 LED matrix
+display network/server stats on LCD character display
+flash LED to notify events
+Control relay which provide power to a server (repurposed old laptop)
+Collect current sensor information (can compute instantaneous power draw of server)
+
+## Architecture
+All the sensors are connected to one Arduino Nano, a python script runs on the Raspberry Pi and
+sends command a usb serial interface to controll the Arduino Nano.
+
+This architecture allows the code to be written in python which shortens development time.
+At the same time, it allows the Raspberry pi to be swapped out in favorite of a more powerful server/computer.
+(As long as the server has USB and can run Python, which is almost all computer)
+
+
+## Testing and CI
+Most python functions has unit tests under hostscripts/test.
+This project has travis CI set up to run these test cases.
+
+
 ## Demo
 
 
